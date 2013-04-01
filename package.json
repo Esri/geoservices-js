@@ -4,7 +4,7 @@
   "description": "Bindings for ArcGIS Online",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vows --spec"
   },
   "repository": {
     "type": "git",
@@ -21,10 +21,8 @@
   "devDependencies": {
     "vows": ">=0.7.0",
     "grunt": "0.4.x",
-    "grunt-contrib-jshint": "0.3.x"
-  },
-  "scripts": {
-    "test": "vows --spec"
+    "grunt-contrib-jshint": "0.3.x",
+    "grunt-contrib-copy": "0.4.x"
   },
   "author": "",
   "license": "Apache",

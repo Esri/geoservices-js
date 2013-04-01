@@ -9,11 +9,26 @@ module.exports = function (grunt) {
           node: true
         }
       }
+    },
+
+    copy: {
+      main: {
+        files: [
+          {
+            cwd: 'src/',
+            src: [ '*.js' ],
+            dest: 'lib/',
+            filter: 'isFile',
+            expand: true
+          }
+        ]
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('default', [ 'jshint' ]);
+  grunt.registerTask('default', [ 'jshint', 'copy' ]);
 
 };
