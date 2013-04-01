@@ -6,7 +6,7 @@ var geocode = require('../src/geocode');
 vows.describe('Geocode').addBatch({
   'When requesting a valid geocode': {
     topic: function () {
-      geocode.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback)
+      geocode.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback);
     },
     'It should return the correct latitude and longitude': function (err, data) {
       assert.equal(err, null);
