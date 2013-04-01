@@ -15,6 +15,9 @@
     "esri",
     "arcgis"
   ],
+  "dependencies": {
+    "xmlhttprequest": "1.5.x"
+  },
   "devDependencies": {
     "vows": ">=0.7.0",
     "grunt": "0.4.x",
