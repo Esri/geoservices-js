@@ -23,12 +23,24 @@ module.exports = function (grunt) {
           }
         ]
       }
+    },
+
+    vows: {
+      all: {
+        options: {
+          reporter: "spec",
+          verbose: false,
+          colors: true
+        },
+        src: [ "test/*.js" ]
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-vows');
 
-  grunt.registerTask('default', [ 'jshint', 'copy' ]);
+  grunt.registerTask('default', [ 'jshint', 'copy', 'vows' ]);
 
 };
