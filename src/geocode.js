@@ -23,7 +23,9 @@ function geocode (parameters, callback) {
   parameters.f = parameters.f || "json";
 
   // build the request
-  var request = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find?' + querystring.stringify(parameters);
+  var request = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findd?';
+  request += querystring.stringify(parameters);
+
   httpRequest.open("GET", request);
   httpRequest.send(null);
 }
