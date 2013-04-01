@@ -1,5 +1,5 @@
 {
-  "name": "arcgis-node",
+  "name": "arcgis",
   "version": "0.1.0",
   "description": "Bindings for ArcGIS Online",
   "main": "index.js",
@@ -22,7 +22,8 @@
     "vows": ">=0.7.0",
     "grunt": "0.4.x",
     "grunt-contrib-jshint": "0.3.x",
-    "grunt-contrib-copy": "0.4.x"
+    "grunt-contrib-copy": "0.4.x",
+    "grunt-vows": "0.4.x"
   },
   "author": "",
   "license": "Apache",
