@@ -15,6 +15,14 @@
     "esri",
     "arcgis"
   ],
+  "devDependencies": {
+    "vows": ">=0.7.0",
+    "grunt": "0.4.x",
+    "grunt-contrib-jshint": "0.3.x"
+  },
+  "scripts": {
+    "test": "vows --spec"
+  },
   "author": "",
   "license": "Apache",
   "readmeFilename": "README.md"
