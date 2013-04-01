@@ -1,4 +1,3 @@
-arcgis-node
-===========
+# arcgis-node
 
-node.js bindings for ago
+Node.js bindings for ArcGIS Online
