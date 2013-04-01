@@ -1,12 +1,13 @@
 var vows   = require('vows');
 var assert = require('assert');
 
-var geocode = require('../src/geocode');
+var arcgis = require('../index').ArcGIS;
 
-vows.describe('Geocode').addBatch({
+vows.describe('Integration').addBatch({
   'When requesting a valid geocode': {
     topic: function () {
-      geocode.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback);
+      var esri = new arcgis();
+      esri.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback);
     },
     'It should return the correct latitude and longitude': function (err, data) {
       assert.equal(err, null);
