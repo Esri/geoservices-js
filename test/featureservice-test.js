@@ -6,7 +6,14 @@ var featureservice = require('../src/featureservice');
 vows.describe('FeatureService').addBatch({
   'When requesting a featureservice': {
     topic: function () {
-      featureservice.FeatureService( 'http://servicesdev.arcgis.com/f126c8da131543019b05e4bfab6fc6ac/arcgis/rest/services', 'hospitals', { format: 'json' }, this.callback);
+
+      var params = {
+        catalog: 'http://servicesdev.arcgis.com/f126c8da131543019b05e4bfab6fc6ac/arcgis/rest/services',
+        service: 'hospitals',
+        format: 'json'
+      };
+
+      featureservice.featureservice( params , this.callback);
     },
     'It should return the correct service metadata': function (err, data) {
       assert.equal(err, null);
