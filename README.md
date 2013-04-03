@@ -42,6 +42,24 @@ Simple geocoding is the same as the default `geocode` method:
       }
     });
 
+### FeatureService 
+
+A Very simple way to access a feature service: 
+
+    var params = {
+      catalog: 'http://servicesdev.arcgis.com/.../arcgis/rest/services',
+      service: 'hospitals',
+      format: 'json'
+    }
+
+    client.featureservice( params, function( err, result ){
+      if (err) {
+        console.error("ERROR: " + err);
+      } else {
+        console.log( result );
+      }
+    })
+
 ## Building
 
 ArcGIS-Node uses `grunt` for its build system.  To install:
