@@ -14,12 +14,7 @@ function authenticate (username, password, options, callback) {
     data.expiration = options.expiration;
   }
 
-  function internalCallback (err, data) {
-    if (data) {
-      this.token = data;
-    }
-  }
-  request.post(url, data, internalCallback);
+  request.post(url, data, callback);
 }
 
 exports.authenticate = authenticate;
