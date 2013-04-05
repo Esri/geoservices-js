@@ -1,8 +1,8 @@
 var request = require('./request');
 
 function authenticate (username, password, options, callback) {
-  console.dir(this);
   var url = "https://www.arcgis.com/sharing/generateToken";
+
   var data = {
     username: username,
     password: password,
@@ -14,11 +14,15 @@ function authenticate (username, password, options, callback) {
     data.expiration = options.expiration;
   }
 
+  var self = this;
+
   function internalCallback (err, data) {
     if (data) {
-      this.token = data;
+      self.token = data;
     }
+    callback(err, data);
   }
+
   request.post(url, data, internalCallback);
 }
 
