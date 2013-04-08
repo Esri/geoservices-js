@@ -36,7 +36,7 @@ Batch.prototype.geocode = function (data, optionalId) {
     data.OBJECTID = optionalId;
   } else if (typeof data === 'string') {
     data = {
-      "Address": data,
+      "SingleLine": data,
       OBJECTID: optionalId
     };
   }
