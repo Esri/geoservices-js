@@ -29,7 +29,7 @@ function Batch (token) {
 
 Batch.prototype.geocode = function (data, optionalId) {
   if (optionalId === undefined || optionalId === null) {
-    optionalId = this.data.length;
+    optionalId = this.data.length + 1;
   }
 
   if (typeof data === 'object') {
@@ -41,7 +41,7 @@ Batch.prototype.geocode = function (data, optionalId) {
     };
   }
 
-  this.data.push(data);
+  this.data.push({ attributes: data});
 };
 
 Batch.prototype.setToken = function (token) {
