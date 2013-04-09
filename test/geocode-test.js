@@ -34,5 +34,40 @@ vows.describe('Geocode').addBatch({
       assert.equal(err, null);
       assert.equal(data.address.Address, "918 Sw 3rd Ave");
     }
+  },
+  'When requesting all address matches using text': {
+    topic: function () {
+      geocode.geocode.addresses({ text: "920 3rd Ave, Portland, OR 97204" }, this.callback);
+    },
+    'It should return a sorted list of likely geocode matches': function (err, data) {
+      assert.equal(err, null);
+      assert.isTrue(data.candidates.length > 1);
+      assert.isTrue(data.candidates[0].score > 90);
+      assert.equal(data.candidates[0].location.x, -122.67633658436517);
+      assert.equal(data.candidates[0].location.y, 45.5167324388521);
+      var lastMatch = data.candidates.pop();
+      assert.equal(lastMatch.address, "Portland, OR");
+      assert.equal(lastMatch.attributes.Addr_type, "SubAdmin");
+    }
+  },
+  'When requesting all address matches using object': {
+    topic: function () {
+      geocode.geocode.addresses({
+        Address: "920 3rd Ave",
+        City: "Portland",
+        Region: "OR",
+        Postal: "97204" },
+      this.callback);
+    },
+    'It should return a sorted list of likely geocode matches': function (err, data) {
+      assert.equal(err, null);
+      assert.isTrue(data.candidates.length > 1);
+      assert.isTrue(data.candidates[0].score > 90);
+      assert.equal(data.candidates[0].location.x, -122.67633658436517);
+      assert.equal(data.candidates[0].location.y, 45.5167324388521);
+      var lastMatch = data.candidates.pop();
+      assert.equal(lastMatch.address, "Portland, OR");
+      assert.equal(lastMatch.attributes.Addr_type, "SubAdmin");
+    }
   }
 }).export(module);
