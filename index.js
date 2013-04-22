@@ -16,7 +16,10 @@ function ArcGIS (options) {
   this.geocode.Batch = function (optionalToken) {
     optionalToken = optionalToken || self.token.token;
 
-    return new geocode.Batch(optionalToken);
+    var batch = new geocode.Batch(optionalToken);
+    batch.requestHandler = request;
+
+    return batch;
   };
 }
 
