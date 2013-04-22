@@ -1,8 +1,8 @@
 var vows   = require('vows');
 var assert = require('assert');
 
-var request = require('../src/request');
-var geocode = require('../src/geocode');
+var request = require('../lib/request');
+var geocode = require('../lib/geocode');
 
 // stub in requestHandler
 geocode.requestHandler = request;
