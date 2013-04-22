@@ -75,5 +75,36 @@ vows.describe('Geocode').addBatch({
       assert.equal(lastMatch.address, "Portland, OR");
       assert.equal(lastMatch.attributes.Addr_type, "SubAdmin");
     }
+  },
+  'When batch geocoding': {
+    'and no token is available': {
+      topic: function () {
+        var batch = new geocode.Batch();
+        batch.geocode('123 Fake Street');
+
+        var callback = this.callback;
+        batch.run(function (err, data) {
+          callback(null, err);
+        });
+      },
+      'an error is returned': function (err, data) {
+        assert.equal(data, "Valid authentication token is required");
+      }
+    },
+    'and the token is expired': {
+      topic: function () {
+        var batch = new geocode.Batch({ token: "abc", expires: 123 });
+        batch.geocode('123 Fake Street');
+
+        var callback = this.callback;
+        batch.run(function (err, data) {
+          callback(null, err);
+        });
+      },
+      'an error is returned': function (err, data) {
+        assert.equal(data, "Valid authentication token is required");
+      }
+    }
+
   }
 }).export(module);
