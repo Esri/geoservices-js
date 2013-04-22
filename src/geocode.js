@@ -40,7 +40,7 @@ function addresses (parameters, callback) {
 
   url += querystring.stringify(parameters);
 
-  request.get(url, callback);
+  this.requestHandler.get(url, callback);
 }
 
 function Batch (token) {
