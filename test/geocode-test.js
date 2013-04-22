@@ -1,7 +1,13 @@
 var vows   = require('vows');
 var assert = require('assert');
 
+var request = require('../src/request');
 var geocode = require('../src/geocode');
+
+// stub in requestHandler
+geocode.requestHandler = request;
+geocode.geocode.requestHandler = request;
+geocode.geocode.reverse.requestHandler = request;
 
 vows.describe('Geocode').addBatch({
   'When requesting a valid geocode': {
