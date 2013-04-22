@@ -14,7 +14,7 @@ function ArcGIS (options) {
   var self = this;
 
   this.geocode.Batch = function (optionalToken) {
-    optionalToken = optionalToken || self.token.token;
+    optionalToken = optionalToken || self.token;
 
     var batch = new geocode.Batch(optionalToken);
     batch.requestHandler = request;
