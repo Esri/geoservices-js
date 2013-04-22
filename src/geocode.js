@@ -21,6 +21,28 @@ function reverse (parameters, callback) {
   this.requestHandler.get(url, callback);
 }
 
+function addresses (parameters, callback) {
+  parameters.f = parameters.f || "json";
+
+  //build the request url
+  var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?';
+
+  //allow a text query like simple geocode service to return all candidate addresses
+  if (parameters.text) {
+    parameters.SingleLine = parameters.text;
+    delete parameters.text;
+  }
+  //at very least you need the Addr_type attribute returned with results
+  parameters.outFields = parameters.outFields || 'Addr_type';
+  if (parameters.outFields !== '*' && parameters.outFields.indexOf('Addr_type') < 0) {
+    parameters.outFields += ',Addr_type';
+  }
+
+  url += querystring.stringify(parameters);
+
+  request.get(url, callback);
+}
+
 function Batch (token) {
   this.data = [ ];
   this.token = token;
@@ -28,19 +50,19 @@ function Batch (token) {
 
 Batch.prototype.geocode = function (data, optionalId) {
   if (optionalId === undefined || optionalId === null) {
-    optionalId = this.data.length;
+    optionalId = this.data.length + 1;
   }
 
   if (typeof data === 'object') {
     data.OBJECTID = optionalId;
   } else if (typeof data === 'string') {
     data = {
-      "Address": data,
+      "SingleLine": data,
       OBJECTID: optionalId
     };
   }
 
-  this.data.push(data);
+  this.data.push({ attributes: data});
 };
 
 Batch.prototype.setToken = function (token) {
@@ -64,5 +86,6 @@ Batch.prototype.run = function (callback) {
 
 geocode.simple  = geocode;
 geocode.reverse = reverse;
+geocode.addresses = addresses;
 exports.Batch   = Batch;
 exports.geocode = geocode;
