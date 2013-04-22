@@ -1,6 +1,5 @@
 
-var request     = require('./request'),
-    querystring = require('querystring');
+var querystring = require('querystring');
 
 function geocode (parameters, callback) {
   parameters.f = parameters.f || "json";
@@ -9,7 +8,7 @@ function geocode (parameters, callback) {
   var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find?';
   url += querystring.stringify(parameters);
 
-  request.get(url, callback);
+  this.requestHandler.get(url, callback);
 }
 
 function reverse (parameters, callback) {
@@ -19,7 +18,7 @@ function reverse (parameters, callback) {
   var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?';
   url += querystring.stringify(parameters);
 
-  request.get(url, callback);
+  this.requestHandler.get(url, callback);
 }
 
 function addresses (parameters, callback) {
@@ -41,7 +40,7 @@ function addresses (parameters, callback) {
 
   url += querystring.stringify(parameters);
 
-  request.get(url, callback);
+  this.requestHandler.get(url, callback);
 }
 
 function Batch (token) {
@@ -80,7 +79,7 @@ Batch.prototype.run = function (callback) {
     referer: "arcgis-node"
   };
 
-  request.post("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/geocodeAddresses", data, callback);
+  this.requestHandler.post("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/geocodeAddresses", data, callback);
 };
 
 
