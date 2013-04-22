@@ -3,7 +3,7 @@ var assert = require('assert');
 
 var nock = require('nock');
 
-var authentication = require('../src/authentication');
+var authentication = require('../lib/authentication');
 
 vows.describe('Authentication').addBatch({
   'When authenticating with a valid account': {
