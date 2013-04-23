@@ -16,7 +16,8 @@
     "arcgis"
   ],
   "dependencies": {
-    "xmlhttprequest": "1.5.x"
+    "xmlhttprequest": "1.5.x",
+    "grunt-contrib-concat": "~0.2.0"
   },
   "devDependencies": {
     "vows": ">=0.7.0",

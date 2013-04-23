@@ -1,8 +1,6 @@
 var vows   = require('vows');
 var assert = require('assert');
 
-var nock = require('nock');
-
 var authentication = require('../lib/authentication');
 
 vows.describe('Authentication').addBatch({

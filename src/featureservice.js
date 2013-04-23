@@ -1,5 +1,3 @@
-var querystring = require('querystring');
-
 function featureservice ( options, callback ) {
 
   var _featureservice = {
@@ -42,6 +40,3 @@ function featureservice ( options, callback ) {
   return _featureservice;
 
 }
-
-
-exports.featureservice = featureservice;

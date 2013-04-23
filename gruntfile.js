@@ -3,7 +3,7 @@ module.exports = function (grunt) {
     pkg:   grunt.file.readJSON('package.json'),
 
     jshint: {
-      files: [ 'gruntfile.js', 'src/**/*.js', 'test/**/*.js' ],
+      files: [ 'gruntfile.js', 'lib/**/*.js', 'test/**/*.js' ],
       options: {
         globals: {
           node: true
@@ -11,17 +11,27 @@ module.exports = function (grunt) {
       }
     },
 
-    copy: {
-      main: {
-        files: [
-          {
-            cwd: 'src/',
-            src: [ '*.js' ],
-            dest: 'lib/',
-            filter: 'isFile',
-            expand: true
-          }
-        ]
+    concat: {
+      node: {
+        files: {
+          'lib/authentication.js': [ 'src/authentication.js', 'src/partials/node/authentication-tail.js' ],
+          'lib/featureservice.js': [ 'src/featureservice.js', 'src/partials/node/featureservice-tail.js' ],
+          'lib/geocode.js': [ 'src/partials/node/querystring.js', 'src/geocode.js', 'src/partials/node/geocode-tail.js' ],
+          'lib/request.js': [ 'src/partials/node/querystring.js', 'src/partials/node/request-head.js', 'src/request.js', 'src/partials/node/request-tail.js' ]
+        }
+      },
+      browser: {
+        files: {
+          'browser/arcgis.js': [
+            'src/partials/browser/head.js',
+            'src/partials/browser/querystring.js',
+            'src/authentication.js',
+            'src/featureservice.js',
+            'src/geocode.js',
+            'src/request.js',
+            'src/partials/browser/tail.js'
+          ]
+        }
       }
     },
 
@@ -39,8 +49,9 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-vows');
 
-  grunt.registerTask('default', [ 'jshint', 'copy', 'vows' ]);
+  grunt.registerTask('default', [ 'concat', 'jshint', 'vows' ]);
 
 };

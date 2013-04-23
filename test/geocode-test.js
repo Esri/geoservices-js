@@ -105,6 +105,25 @@ vows.describe('Geocode').addBatch({
         assert.equal(data, "Valid authentication token is required");
       }
     }
+  },
+  'When a batch geocode request is made': {
+    topic: function () {
+      var batch = new geocode.Batch({ token: "abc", expires: (+new Date()) + 10000 });
 
+      var ret = { spatialReference: { wkid: 4326, latestWkid: 4326 }, locations: [ { address: '920 SW 3rd Ave, Portland, OR, 97204' } ] };
+
+      batch.requestHandler = {
+        post: function (url, data, callback) {
+          callback(null, ret);
+        }
+      };
+
+      batch.geocode('123 Fake Street');
+
+      batch.run(this.callback);
+    },
+    'a result is parsed and returned': function (err, data) {
+      assert.equal(data.locations.length, 1);
+    }
   }
 }).export(module);
