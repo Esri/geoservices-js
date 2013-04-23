@@ -23,5 +23,3 @@ function authenticate (username, password, options, callback) {
 
   this.requestHandler.post(url, data, internalCallback);
 }
-
-exports.authenticate = authenticate;
