@@ -20,5 +20,24 @@ vows.describe('FeatureService').addBatch({
       assert.notEqual(data, null);
       assert.equal(data.name, 'hospitals');
     }
+  },
+  'When sending a query to a feature service': {
+    topic: function () {
+      var self = this;
+
+      var params = {
+        catalog: 'http://servicesdev.arcgis.com/f126c8da131543019b05e4bfab6fc6ac/arcgis/rest/         services',
+        service: 'hospitals',
+        format: 'json'
+      };
+
+      var fs = featureservice.featureservice( params , function(err, data){
+        fs.query({f: 'json'}, self.callback);
+      });
+    },
+    'It should return the correct service metadata': function (err, data) {
+      assert.equal(err, null);
+      assert.notEqual(data.length, 0);
+    }
   }
 }).export(module);

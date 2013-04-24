@@ -4,23 +4,23 @@ var request = require('./request'),
 function featureservice ( options, callback ) {
 
   var _featureservice = {
+    url: url, 
     query: query,
     update: update
   };
+    
+  var url = [ options.catalog, options.service, 'FeatureServer/0'].join('/').replace(/\s/g, ''); 
   
   // retrieves the service metadata 
   function get(){
+    var fs_url = url + '?f=' + ( options.format || 'json' );
     if ( !options || !options.catalog || !options.service ){
       if ( callback ) { 
         callback('Must provide at least a feature service "catalog url" and "service"');
       }
     } 
 
-    var url = [ options.catalog, options.service, 'FeatureServer/0'].join('/') + '?f=' + ( options.format || 'json' );
-
-    _featureservice.url = url;
-
-    request.get( url, function( err, data ) { 
+    request.get( fs_url, function( err, data ) { 
       if ( callback ) { callback( err, data ); }
     });
 
@@ -28,12 +28,15 @@ function featureservice ( options, callback ) {
 
   
   // issues a query to the server  
-  function query( parameters, callback ){
+  function query( params, callback ){
 
+    url += '/query?' + querystring.stringify( params );
+    console.log('URL', url);
+    request.get( url, callback );
   }
 
   // issues an update request on the feature service 
-  function update( parameters, callback ){
+  function update( params, callback ){
 
   }
 
