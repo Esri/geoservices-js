@@ -1,7 +1,7 @@
 var vows   = require('vows');
 var assert = require('assert');
 
-var arcgis = require('../index').ArcGIS;
+var arcgis = require('../index');
 
 vows.describe('Integration').addBatch({
   'When requesting a valid geocode': {
