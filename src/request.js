@@ -1,5 +1,3 @@
-var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest,
-    querystring    = require('querystring');
 
 function get (url, callback) {
   var httpRequest = new XMLHttpRequest();
@@ -18,10 +16,12 @@ function get (url, callback) {
   }
 
   httpRequest.onreadystatechange = requestHandler;
-  httpRequest.setDisableHeaderCheck(true);
 
   httpRequest.open("GET", url);
-  httpRequest.setRequestHeader("Referer", "arcgis-node");
+  if (httpRequest.setDisableHeaderCheck !== undefined) {
+    httpRequest.setDisableHeaderCheck(true);
+    httpRequest.setRequestHeader("Referer", "arcgis-node");
+  }
   httpRequest.send(null);
 }
 
@@ -48,8 +48,5 @@ function post (url, data, callback) {
   httpRequest.setRequestHeader("Referer", "arcgis-node");
   httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-  httpRequest.send(querystring.stringify(data));
+  httpRequest.send(stringify(data));
 }
-
-exports.get = get;
-exports.post = post;

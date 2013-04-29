@@ -1,7 +1,11 @@
 var vows   = require('vows');
 var assert = require('assert');
+var request = require('../lib/request');
 
-var featureservice = require('../src/featureservice');
+var featureservice = require('../lib/featureservice');
+
+// stub in requestHandler
+featureservice.requestHandler = request;
 
 vows.describe('FeatureService').addBatch({
   'When requesting a featureservice': {
