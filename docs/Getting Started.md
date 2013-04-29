@@ -23,6 +23,6 @@ This module exposes both authenticated and non-authenticated aspects of [ArcGIS 
 
 ### Basic Usage
 
-    var ArcGIS = require('arcgis').ArcGIS;
+    var ArcGIS = require('arcgis');
     
     var client = new ArcGIS();
