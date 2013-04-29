@@ -4,7 +4,7 @@ Node.js bindings for ArcGIS Online
 
 ## Usage
 
-    var ArcGIS = require('arcgis').ArcGIS;
+    var ArcGIS = require('arcgis');
     
     var client = new ArcGIS({ /* optional credentials */ });
 
