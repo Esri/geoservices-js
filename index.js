@@ -23,4 +23,4 @@ function ArcGIS (options) {
   };
 }
 
-exports.ArcGIS = ArcGIS;
+module.exports = exports = ArcGIS;

@@ -1,42 +1,116 @@
-function featureservice ( options, callback ) {
+function featureservice(options, callback) {
 
   var _featureservice = {
-    url: url, 
     query: query,
-    update: update
+    update: update,
+    edit: edit,
+    count: count,
+    add: add,
+    remove: remove,
+    ids: ids,
+    lastQuery: null,
+    url: null
   };
     
-  var url = [ options.catalog, options.service, 'FeatureServer/0'].join('/').replace(/\s/g, ''); 
-  
   var requestHandler = this.requestHandler;
   
   // retrieves the service metadata 
-  function get(){
-    var fs_url = url + '?f=' + ( options.format || 'json' );
-    if ( !options || !options.catalog || !options.service ){
-      if ( callback ) {
-        callback('Must provide at least a feature service "catalog url" and "service"');
+  function get() {
+    if (!options || !options.catalog || !options.service || !options.type ) {
+      if (callback) {
+        callback('Must provide at least a feature service "catalog url" and "service" and "type"');
       }
     }
 
-    requestHandler.get( fs_url, function( err, data ) {
-      if ( callback ) { callback( err, data ); }
-    });
+    var url = [options.catalog, options.service, options.type].join('/') + (options.layer ? '/' + options.layer : '');
 
+    _featureservice.url = url;
+
+    _featureservice.token = options.token;
+
+    issueRequest(null, {
+      f: options.format || 'json'
+    }, callback);
   }
 
+  // internal callback wrapper for err logic 
+  function _internalCallback(err, data, cb){
+    if (cb) {
+      // check for an error passed in this response 
+      if ( data.error ) {
+        cb( data.error, null);
+      } else {
+        cb( err, data );
+      }
+    }
+  } 
+
+  function issueRequest(endPoint, parameters, cb, method) {
+    parameters.f = parameters.f || 'json';
+    parameters.outFields = parameters.outFields || '*';
+    if (_featureservice.token && !parameters.token) {
+      parameters.token = _featureservice.token;
+    }
+    var url = _featureservice.url + (endPoint && endPoint != 'base' ? '/' + endPoint : '');
+    if (!method || method.toLowerCase() == "get") {
+      url += '?' + stringify(parameters);
+      requestHandler.get(url, function(err, data){
+        _internalCallback(err, data, cb);
+      });
+    } else {
+      requestHandler[method](url, parameters, function(err, data) {
+        _internalCallback(err, data, cb);
+      });
+    }
+  }
 
   // issues a query to the server  
-  function query( params, callback ){
+  function query(parameters, callback) {
+    _featureservice.lastQuery = parameters;
+    var method = parameters.method || 'get';
+    delete parameters.method;
+    issueRequest('query', parameters, callback, method);
+  }
 
-    url += '/query?' + querystring.stringify( params );
-    console.log('URL', url);
-    request.get( url, callback );
+  // issues a count only query to the server
+
+  function count(parameters, callback) {
+    parameters.returnCountOnly = true;
+    parameters.returnIdsOnly = false;
+    query(parameters, callback);
+  }
+
+  // issues an id's only query to the server
+
+  function ids(parameters, callback) {
+    parameters.returnIdsOnly = true;
+    parameters.returnCountOnly = false;
+    query(parameters, callback);
   }
 
   // issues an update request on the feature service 
-  function update( params, callback ){
 
+  function update(parameters, callback) {
+    issueRequest('updateFeatures', parameters, callback, 'post');
+  }
+
+  // issues an add request on the feature service 
+
+  function add(parameters, callback) {
+    issueRequest('addFeatures', parameters, callback, 'post');
+  }
+
+  // issues a remove request on the feature service 
+
+  function remove(parameters, callback) {
+    issueRequest('deleteFeatures', parameters, callback, 'post');
+  }
+
+  // issues an edit request on the feature service
+  // this applies adds, updates, and deletes in a single request
+
+  function edit(parameters, callback) {
+    issueRequest('applyEdits', parameters, callback, 'post');
   }
 
   get();
