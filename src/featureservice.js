@@ -11,18 +11,18 @@ function featureservice(options, callback) {
     lastQuery: null,
     url: null
   };
-
+    
   var requestHandler = this.requestHandler;
+  
   // retrieves the service metadata 
-
   function get() {
-    if (!options || !options.catalog || !options.service) {
+    if (!options || !options.catalog || !options.service || !options.type ) {
       if (callback) {
-        callback('Must provide at least a feature service "catalog url" and "service"');
+        callback('Must provide at least a feature service "catalog url" and "service" and "type"');
       }
     }
 
-    var url = [options.catalog, options.service, 'FeatureServer'].join('/') + (options.layer ? '/' + options.layer : '');
+    var url = [options.catalog, options.service, options.type].join('/') + (options.layer ? '/' + options.layer : '');
 
     _featureservice.url = url;
 
@@ -33,7 +33,19 @@ function featureservice(options, callback) {
     }, callback);
   }
 
-  function issueRequest(endPoint, parameters, callback, method) {
+  // internal callback wrapper for err logic 
+  function _internalCallback(err, data, cb){
+    if (cb) {
+      // check for an error passed in this response 
+      if ( data.error ) {
+        cb( data.error, null);
+      } else {
+        cb( err, data );
+      }
+    }
+  } 
+
+  function issueRequest(endPoint, parameters, cb, method) {
     parameters.f = parameters.f || 'json';
     parameters.outFields = parameters.outFields || '*';
     if (_featureservice.token && !parameters.token) {
@@ -42,22 +54,17 @@ function featureservice(options, callback) {
     var url = _featureservice.url + (endPoint && endPoint != 'base' ? '/' + endPoint : '');
     if (!method || method.toLowerCase() == "get") {
       url += '?' + stringify(parameters);
-      requestHandler.get(url, function(err, data) {
-        if (callback) {
-          callback(err, data);
-        }
+      requestHandler.get(url, function(err, data){
+        _internalCallback(err, data, cb);
       });
     } else {
       requestHandler[method](url, parameters, function(err, data) {
-        if (callback) {
-          callback(err, data);
-        }
+        _internalCallback(err, data, cb);
       });
     }
   }
 
   // issues a query to the server  
-
   function query(parameters, callback) {
     _featureservice.lastQuery = parameters;
     var method = parameters.method || 'get';
