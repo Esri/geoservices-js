@@ -8,17 +8,28 @@ var params = {
   catalog: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services',
   service: 'Census',
   type: 'MapServer',
-  layer: 3,
-  format: 'json'
+  layer: 3
 };
 
 // stub in requestHandler
 featureservice.requestHandler = request;
 
 vows.describe('FeatureService').addBatch({
-  'When requesting a featureservice': {
+  'When requesting a featureservice by catalog/type/service': {
     topic: function () {
-      featureservice.featureservice( params , this.callback);
+      featureservice.FeatureService( params , this.callback);
+    },
+    'It should return the correct service metadata': function (err, data) {
+      assert.equal(err, null);
+      assert.notEqual(data, null);
+      //assert.equal(data.layers[0].name, 'hospitals');
+    }
+  },
+  'When requesting a featureservice by url': {
+    topic: function () {
+      featureservice.FeatureService({
+        url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3'
+      } , this.callback);
     },
     'It should return the correct service metadata': function (err, data) {
       assert.equal(err, null);
@@ -30,7 +41,7 @@ vows.describe('FeatureService').addBatch({
     topic: function () {
       var self = this;
 
-      var fs = featureservice.featureservice( params , function(err, data){
+      var fs = featureservice.FeatureService( params , function(err, data){
         fs.query({f: 'json'}, self.callback);
       });
     },
@@ -38,7 +49,7 @@ vows.describe('FeatureService').addBatch({
       assert.notEqual(err, null);
       //assert.equal(data.layers.length, 0);
     }
-  }, 
+  },
   'When sending a query with proper params': {
     topic: function(){
       var self = this;
@@ -57,7 +68,7 @@ vows.describe('FeatureService').addBatch({
         outSR: '4326'*/
       };
 
-      var fs = featureservice.featureservice( params , function(err, data){
+      var fs = featureservice.FeatureService( params , function(err, data){
         fs.query(query_params, self.callback);
       });
     },
