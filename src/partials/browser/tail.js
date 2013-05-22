@@ -2,7 +2,7 @@ function ArcGIS (options) {
   this.options = options;
 
   this.geocode = geocode;
-  this.featureservice = featureservice;
+  this.FeatureService = FeatureService;
   this.authenticate   = authenticate;
   this.requestHandler = { get: get, post: post };
 
