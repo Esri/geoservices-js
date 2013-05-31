@@ -202,7 +202,9 @@ function reverse (parameters, callback) {
 }
 
 function addresses (parameters, callback) {
-  parameters.f = parameters.f || "json";
+  if (!parameters.f) {
+    parameters.f = 'json';
+  }
 
   //build the request url
   var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?';
@@ -213,8 +215,12 @@ function addresses (parameters, callback) {
     delete parameters.text;
   }
   //at very least you need the Addr_type attribute returned with results
-  parameters.outFields = parameters.outFields || 'Addr_type';
-  if (parameters.outFields !== '*' && parameters.outFields.indexOf('Addr_type') < 0) {
+  if (!parameters.outFields) {
+    parameters.outFields = "Addr_type";
+  }
+
+  if (parameters.outFields !== '*' && 
+    parameters.outFields.indexOf('Addr_type') < 0) {
     parameters.outFields += ',Addr_type';
   }
 
@@ -229,7 +235,7 @@ function Batch (token) {
 }
 
 Batch.prototype.geocode = function (data, optionalId) {
-  if (optionalId === undefined || optionalId === null) {
+  if (!optionalId) {
     optionalId = this.data.length + 1;
   }
 
@@ -242,7 +248,7 @@ Batch.prototype.geocode = function (data, optionalId) {
     };
   }
 
-  this.data.push({ attributes: data});
+  this.data.push({ attributes: data });
 };
 
 Batch.prototype.setToken = function (token) {
@@ -250,16 +256,20 @@ Batch.prototype.setToken = function (token) {
 };
 
 Batch.prototype.run = function (callback) {
-  if (this.token === undefined || this.token === null ||
-      this.token.token === undefined || this.token.token === null ||
-      this.token.expires < +new Date()) {
+  var current = new Date();
+
+  if (!this.token ||
+      !this.token.token ||
+      this.token.expires < current) {
     callback("Valid authentication token is required");
   } else {
+    var internal = JSON.stringify({
+      records: this.data
+    });
+
     var data = {
       token: this.token.token,
-      addresses: JSON.stringify({
-        records: this.data
-      }),
+      addresses: internal,
       f: "json",
       referer: "arcgis-node"
     };
