@@ -1,4 +1,4 @@
-function featureservice(options, callback) {
+function FeatureService(options, callback) {
 
   var _featureservice = {
     query: query,
@@ -13,16 +13,21 @@ function featureservice(options, callback) {
   };
 
   var requestHandler = this.requestHandler;
-  // retrieves the service metadata 
 
+  // retrieves the service metadata
   function get() {
-    if (!options || !options.catalog || !options.service) {
+    var url;
+    if (!options && (!options.catalog && !options.service && !options.type) && !options.url ) {
       if (callback) {
-        callback('Must provide at least a feature service "catalog url" and "service"');
+        callback('Must provide at least a feature service "catalog", "service" and "type", or a "url" to a feature service or feature layer');
       }
     }
 
-    var url = [options.catalog, options.service, 'FeatureServer'].join('/') + (options.layer ? '/' + options.layer : '');
+    if(options.url){
+      url = options.url;
+    } else {
+      url = [options.catalog, options.service, options.type].join('/') + (options.layer ? '/' + options.layer : '');
+    }
 
     _featureservice.url = url;
 
@@ -33,31 +38,38 @@ function featureservice(options, callback) {
     }, callback);
   }
 
-  function issueRequest(endPoint, parameters, callback, method) {
+  // internal callback wrapper for err logic
+  function _internalCallback(err, data, cb){
+    if (cb) {
+      // check for an error passed in this response
+      if (data && data.error ) {
+        cb( data.error, null);
+      } else {
+        cb( err, data );
+      }
+    }
+  }
+
+  function issueRequest(endPoint, parameters, cb, method) {
     parameters.f = parameters.f || 'json';
     parameters.outFields = parameters.outFields || '*';
     if (_featureservice.token && !parameters.token) {
       parameters.token = _featureservice.token;
     }
-    var url = _featureservice.url + (endPoint && endPoint != 'base' ? '/' + endPoint : '');
-    if (!method || method.toLowerCase() == "get") {
+    var url = _featureservice.url + (endPoint && endPoint !== 'base' ? '/' + endPoint : '');
+    if (!method || method.toLowerCase() === "get") {
       url += '?' + stringify(parameters);
-      requestHandler.get(url, function(err, data) {
-        if (callback) {
-          callback(err, data);
-        }
+      requestHandler.get(url, function(err, data){
+        _internalCallback(err, data, cb);
       });
     } else {
       requestHandler[method](url, parameters, function(err, data) {
-        if (callback) {
-          callback(err, data);
-        }
+        _internalCallback(err, data, cb);
       });
     }
   }
 
-  // issues a query to the server  
-
+  // issues a query to the server
   function query(parameters, callback) {
     _featureservice.lastQuery = parameters;
     var method = parameters.method || 'get';
@@ -81,19 +93,19 @@ function featureservice(options, callback) {
     query(parameters, callback);
   }
 
-  // issues an update request on the feature service 
+  // issues an update request on the feature service
 
   function update(parameters, callback) {
     issueRequest('updateFeatures', parameters, callback, 'post');
   }
 
-  // issues an add request on the feature service 
+  // issues an add request on the feature service
 
   function add(parameters, callback) {
     issueRequest('addFeatures', parameters, callback, 'post');
   }
 
-  // issues a remove request on the feature service 
+  // issues a remove request on the feature service
 
   function remove(parameters, callback) {
     issueRequest('deleteFeatures', parameters, callback, 'post');

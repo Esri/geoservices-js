@@ -1,2 +1,1 @@
-
-exports.featureservice = featureservice;
+exports.FeatureService = FeatureService;
