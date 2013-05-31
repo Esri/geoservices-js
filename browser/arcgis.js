@@ -74,9 +74,9 @@ function featureservice(options, callback) {
   
   // retrieves the service metadata 
   function get() {
-    if (!options || !options.catalog || !options.service) {
+    if (!options || !options.catalog || !options.service || !options.type ) {
       if (callback) {
-        callback('Must provide at least a feature service "catalog url" and "service"');
+        callback('Must provide at least a feature service "catalog url" and "service" and "type"');
       }
     }
 
@@ -112,7 +112,6 @@ function featureservice(options, callback) {
     var url = _featureservice.url + (endPoint && endPoint != 'base' ? '/' + endPoint : '');
     if (!method || method.toLowerCase() == "get") {
       url += '?' + stringify(parameters);
-      console.log('get', url);
       requestHandler.get(url, function(err, data){
         _internalCallback(err, data, cb);
       });
