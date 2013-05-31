@@ -19,19 +19,25 @@ function reverse (parameters, callback) {
 }
 
 function addresses (parameters, callback) {
-  parameters.f = parameters.f || "json";
+  if (nullOrUndefined(parameters.f)) {
+    parameters.f = 'json';
+  }
 
   //build the request url
   var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?';
 
   //allow a text query like simple geocode service to return all candidate addresses
-  if (parameters.text) {
+  if (nullOrUndefined(parameters.text) !== true) {
     parameters.SingleLine = parameters.text;
     delete parameters.text;
   }
   //at very least you need the Addr_type attribute returned with results
-  parameters.outFields = parameters.outFields || 'Addr_type';
-  if (parameters.outFields !== '*' && parameters.outFields.indexOf('Addr_type') < 0) {
+  if (nullOrUndefined(parameters.outFields)) {
+    parameters.outFields = "Addr_type";
+  }
+
+  if (parameters.outFields !== '*' && 
+      parameters.outFields.indexOf('Addr_type') < 0) {
     parameters.outFields += ',Addr_type';
   }
 
@@ -40,13 +46,17 @@ function addresses (parameters, callback) {
   this.requestHandler.get(url, callback);
 }
 
+function nullOrUndefined (value) {
+  return (value === null || value === undefined);
+}
+
 function Batch (token) {
   this.data = [ ];
   this.token = token;
 }
 
 Batch.prototype.geocode = function (data, optionalId) {
-  if (optionalId === undefined || optionalId === null) {
+  if (nullOrUndefined(optionalId)) {
     optionalId = this.data.length + 1;
   }
 
@@ -59,7 +69,7 @@ Batch.prototype.geocode = function (data, optionalId) {
     };
   }
 
-  this.data.push({ attributes: data});
+  this.data.push({ attributes: data });
 };
 
 Batch.prototype.setToken = function (token) {
@@ -67,16 +77,20 @@ Batch.prototype.setToken = function (token) {
 };
 
 Batch.prototype.run = function (callback) {
-  if (this.token === undefined || this.token === null ||
-      this.token.token === undefined || this.token.token === null ||
-      this.token.expires < +new Date()) {
+  var current = new Date();
+
+  if (nullOrUndefined(this.token) ||
+      nullOrUndefined(this.token.token) ||
+      this.token.expires < current) {
     callback("Valid authentication token is required");
   } else {
+    var internal = JSON.stringify({
+      records: this.data
+    });
+
     var data = {
       token: this.token.token,
-      addresses: JSON.stringify({
-        records: this.data
-      }),
+      addresses: internal,
       f: "json",
       referer: "arcgis-node"
     };
