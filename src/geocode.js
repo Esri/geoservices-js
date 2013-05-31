@@ -19,7 +19,7 @@ function reverse (parameters, callback) {
 }
 
 function addresses (parameters, callback) {
-  if (nullOrUndefined(parameters.f)) {
+  if (!parameters.f) {
     parameters.f = 'json';
   }
 
@@ -27,17 +27,17 @@ function addresses (parameters, callback) {
   var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?';
 
   //allow a text query like simple geocode service to return all candidate addresses
-  if (nullOrUndefined(parameters.text) !== true) {
+  if (parameters.text) {
     parameters.SingleLine = parameters.text;
     delete parameters.text;
   }
   //at very least you need the Addr_type attribute returned with results
-  if (nullOrUndefined(parameters.outFields)) {
+  if (!parameters.outFields) {
     parameters.outFields = "Addr_type";
   }
 
   if (parameters.outFields !== '*' && 
-      parameters.outFields.indexOf('Addr_type') < 0) {
+    parameters.outFields.indexOf('Addr_type') < 0) {
     parameters.outFields += ',Addr_type';
   }
 
@@ -46,17 +46,13 @@ function addresses (parameters, callback) {
   this.requestHandler.get(url, callback);
 }
 
-function nullOrUndefined (value) {
-  return (value === null || value === undefined);
-}
-
 function Batch (token) {
   this.data = [ ];
   this.token = token;
 }
 
 Batch.prototype.geocode = function (data, optionalId) {
-  if (nullOrUndefined(optionalId)) {
+  if (!optionalId) {
     optionalId = this.data.length + 1;
   }
 
@@ -79,8 +75,8 @@ Batch.prototype.setToken = function (token) {
 Batch.prototype.run = function (callback) {
   var current = new Date();
 
-  if (nullOrUndefined(this.token) ||
-      nullOrUndefined(this.token.token) ||
+  if (!this.token ||
+      !this.token.token ||
       this.token.expires < current) {
     callback("Valid authentication token is required");
   } else {
