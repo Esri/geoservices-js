@@ -56,7 +56,7 @@ function authenticate (username, password, options, callback) {
   this.requestHandler.post(url, data, internalCallback);
 }
 
-function featureservice(options, callback) {
+function FeatureService(options, callback) {
 
   var _featureservice = {
     query: query,
@@ -69,18 +69,23 @@ function featureservice(options, callback) {
     lastQuery: null,
     url: null
   };
-    
+
   var requestHandler = this.requestHandler;
-  
-  // retrieves the service metadata 
+
+  // retrieves the service metadata
   function get() {
-    if (!options || !options.catalog || !options.service) {
+    var url;
+    if (!options && (!options.catalog && !options.service && !options.type) && !options.url ) {
       if (callback) {
-        callback('Must provide at least a feature service "catalog url" and "service"');
+        callback('Must provide at least a feature service "catalog", "service" and "type", or a "url" to a feature service or feature layer');
       }
     }
 
-    var url = [options.catalog, options.service, options.type].join('/') + (options.layer ? '/' + options.layer : '');
+    if(options.url){
+      url = options.url;
+    } else {
+      url = [options.catalog, options.service, options.type].join('/') + (options.layer ? '/' + options.layer : '');
+    }
 
     _featureservice.url = url;
 
@@ -91,17 +96,17 @@ function featureservice(options, callback) {
     }, callback);
   }
 
-  // internal callback wrapper for err logic 
+  // internal callback wrapper for err logic
   function _internalCallback(err, data, cb){
     if (cb) {
-      // check for an error passed in this response 
-      if ( data.error ) {
+      // check for an error passed in this response
+      if (data && data.error ) {
         cb( data.error, null);
       } else {
         cb( err, data );
       }
     }
-  } 
+  }
 
   function issueRequest(endPoint, parameters, cb, method) {
     parameters.f = parameters.f || 'json';
@@ -109,10 +114,9 @@ function featureservice(options, callback) {
     if (_featureservice.token && !parameters.token) {
       parameters.token = _featureservice.token;
     }
-    var url = _featureservice.url + (endPoint && endPoint != 'base' ? '/' + endPoint : '');
-    if (!method || method.toLowerCase() == "get") {
+    var url = _featureservice.url + (endPoint && endPoint !== 'base' ? '/' + endPoint : '');
+    if (!method || method.toLowerCase() === "get") {
       url += '?' + stringify(parameters);
-      console.log('get', url);
       requestHandler.get(url, function(err, data){
         _internalCallback(err, data, cb);
       });
@@ -123,7 +127,7 @@ function featureservice(options, callback) {
     }
   }
 
-  // issues a query to the server  
+  // issues a query to the server
   function query(parameters, callback) {
     _featureservice.lastQuery = parameters;
     var method = parameters.method || 'get';
@@ -147,19 +151,19 @@ function featureservice(options, callback) {
     query(parameters, callback);
   }
 
-  // issues an update request on the feature service 
+  // issues an update request on the feature service
 
   function update(parameters, callback) {
     issueRequest('updateFeatures', parameters, callback, 'post');
   }
 
-  // issues an add request on the feature service 
+  // issues an add request on the feature service
 
   function add(parameters, callback) {
     issueRequest('addFeatures', parameters, callback, 'post');
   }
 
-  // issues a remove request on the feature service 
+  // issues a remove request on the feature service
 
   function remove(parameters, callback) {
     issueRequest('deleteFeatures', parameters, callback, 'post');
@@ -177,7 +181,6 @@ function featureservice(options, callback) {
   return _featureservice;
 
 }
-
 function geocode (parameters, callback) {
   parameters.f = parameters.f || "json";
 
@@ -199,7 +202,9 @@ function reverse (parameters, callback) {
 }
 
 function addresses (parameters, callback) {
-  parameters.f = parameters.f || "json";
+  if (!parameters.f) {
+    parameters.f = 'json';
+  }
 
   //build the request url
   var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?';
@@ -210,8 +215,12 @@ function addresses (parameters, callback) {
     delete parameters.text;
   }
   //at very least you need the Addr_type attribute returned with results
-  parameters.outFields = parameters.outFields || 'Addr_type';
-  if (parameters.outFields !== '*' && parameters.outFields.indexOf('Addr_type') < 0) {
+  if (!parameters.outFields) {
+    parameters.outFields = "Addr_type";
+  }
+
+  if (parameters.outFields !== '*' && 
+    parameters.outFields.indexOf('Addr_type') < 0) {
     parameters.outFields += ',Addr_type';
   }
 
@@ -226,7 +235,7 @@ function Batch (token) {
 }
 
 Batch.prototype.geocode = function (data, optionalId) {
-  if (optionalId === undefined || optionalId === null) {
+  if (!optionalId) {
     optionalId = this.data.length + 1;
   }
 
@@ -239,7 +248,7 @@ Batch.prototype.geocode = function (data, optionalId) {
     };
   }
 
-  this.data.push({ attributes: data});
+  this.data.push({ attributes: data });
 };
 
 Batch.prototype.setToken = function (token) {
@@ -247,16 +256,20 @@ Batch.prototype.setToken = function (token) {
 };
 
 Batch.prototype.run = function (callback) {
-  if (this.token === undefined || this.token === null ||
-      this.token.token === undefined || this.token.token === null ||
-      this.token.expires < +new Date()) {
+  var current = new Date();
+
+  if (!this.token ||
+      !this.token.token ||
+      this.token.expires < current) {
     callback("Valid authentication token is required");
   } else {
+    var internal = JSON.stringify({
+      records: this.data
+    });
+
     var data = {
       token: this.token.token,
-      addresses: JSON.stringify({
-        records: this.data
-      }),
+      addresses: internal,
       f: "json",
       referer: "arcgis-node"
     };
@@ -325,7 +338,7 @@ function ArcGIS (options) {
   this.options = options;
 
   this.geocode = geocode;
-  this.featureservice = featureservice;
+  this.FeatureService = FeatureService;
   this.authenticate   = authenticate;
   this.requestHandler = { get: get, post: post };
 

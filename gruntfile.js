@@ -35,6 +35,19 @@ module.exports = function (grunt) {
       }
     },
 
+    complexity: {
+      generic: {
+        src: [ 'lib/authentication.js', 'lib/featureservice.js', 'lib/geocode.js', 'lib/request.js' ],
+        options: {
+          jsLintXML: 'report.xml', // create XML JSLint-like report
+          errorsOnly: false, // show only maintainability errors
+          cyclomatic: 5,
+          halstead: 13,
+          maintainability: 100
+        }
+      }
+    },
+
     vows: {
       all: {
         options: {
@@ -51,7 +64,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-vows');
+  grunt.loadNpmTasks('grunt-complexity');
 
-  grunt.registerTask('default', [ 'concat', 'jshint', 'vows' ]);
+  grunt.registerTask('default', [ 'concat', 'jshint', 'vows', 'complexity' ]);
 
 };
