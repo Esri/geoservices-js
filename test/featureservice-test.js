@@ -41,7 +41,7 @@ vows.describe('FeatureService').addBatch({
     topic: function () {
       var self = this;
 
-      var fs = featureservice.FeatureService( params , function(err, data){
+      var fs = new featureservice.FeatureService( params , function(err, data){
         fs.query({f: 'json'}, self.callback);
       });
     },
@@ -68,7 +68,7 @@ vows.describe('FeatureService').addBatch({
         outSR: '4326'*/
       };
 
-      var fs = featureservice.FeatureService( params , function(err, data){
+      var fs = new featureservice.FeatureService( params , function(err, data){
         fs.query(query_params, self.callback);
       });
     },
