@@ -56,131 +56,136 @@ function authenticate (username, password, options, callback) {
   this.requestHandler.post(url, data, internalCallback);
 }
 
-function FeatureService(options, callback) {
+function FeatureService (options, callback) {
+  this.lastQuery = null;
+  this.url       = null;
+  this.options   = options;
+  this.callback  = callback;
 
-  var _featureservice = {
-    query: query,
-    update: update,
-    edit: edit,
-    count: count,
-    add: add,
-    remove: remove,
-    ids: ids,
-    lastQuery: null,
-    url: null
-  };
+  this.requestHandler = exports.requestHandler;
 
-  var requestHandler = this.requestHandler;
-
-  // retrieves the service metadata
-  function get() {
-    var url;
-    if (!options && (!options.catalog && !options.service && !options.type) && !options.url ) {
-      if (callback) {
-        callback('Must provide at least a feature service "catalog", "service" and "type", or a "url" to a feature service or feature layer');
-      }
-    }
-
-    if(options.url){
-      url = options.url;
-    } else {
-      url = [options.catalog, options.service, options.type].join('/') + (options.layer ? '/' + options.layer : '');
-    }
-
-    _featureservice.url = url;
-
-    _featureservice.token = options.token;
-
-    issueRequest(null, {
-      f: options.format || 'json'
-    }, callback);
-  }
-
-  // internal callback wrapper for err logic
-  function _internalCallback(err, data, cb){
-    if (cb) {
-      // check for an error passed in this response
-      if (data && data.error ) {
-        cb( data.error, null);
-      } else {
-        cb( err, data );
-      }
-    }
-  }
-
-  function issueRequest(endPoint, parameters, cb, method) {
-    parameters.f = parameters.f || 'json';
-    parameters.outFields = parameters.outFields || '*';
-    if (_featureservice.token && !parameters.token) {
-      parameters.token = _featureservice.token;
-    }
-    var url = _featureservice.url + (endPoint && endPoint !== 'base' ? '/' + endPoint : '');
-    if (!method || method.toLowerCase() === "get") {
-      url += '?' + stringify(parameters);
-      requestHandler.get(url, function(err, data){
-        _internalCallback(err, data, cb);
-      });
-    } else {
-      requestHandler[method](url, parameters, function(err, data) {
-        _internalCallback(err, data, cb);
-      });
-    }
-  }
-
-  // issues a query to the server
-  function query(parameters, callback) {
-    _featureservice.lastQuery = parameters;
-    var method = parameters.method || 'get';
-    delete parameters.method;
-    issueRequest('query', parameters, callback, method);
-  }
-
-  // issues a count only query to the server
-
-  function count(parameters, callback) {
-    parameters.returnCountOnly = true;
-    parameters.returnIdsOnly = false;
-    query(parameters, callback);
-  }
-
-  // issues an id's only query to the server
-
-  function ids(parameters, callback) {
-    parameters.returnIdsOnly = true;
-    parameters.returnCountOnly = false;
-    query(parameters, callback);
-  }
-
-  // issues an update request on the feature service
-
-  function update(parameters, callback) {
-    issueRequest('updateFeatures', parameters, callback, 'post');
-  }
-
-  // issues an add request on the feature service
-
-  function add(parameters, callback) {
-    issueRequest('addFeatures', parameters, callback, 'post');
-  }
-
-  // issues a remove request on the feature service
-
-  function remove(parameters, callback) {
-    issueRequest('deleteFeatures', parameters, callback, 'post');
-  }
-
-  // issues an edit request on the feature service
-  // this applies adds, updates, and deletes in a single request
-
-  function edit(parameters, callback) {
-    issueRequest('applyEdits', parameters, callback, 'post');
-  }
-
-  get();
-
-  return _featureservice;
-
+  this.get();
 }
+
+FeatureService.prototype.buildUrl = function () {
+  var options = this.options;
+
+  var url;
+
+  if (options.url) {
+    url = options.url;
+  } else {
+    url = [ options.catalog, options.service, options.type ].join('/') + (options.layer ? '/' + options.layer : '');
+  }
+
+  return url;
+};
+
+FeatureService.prototype.get = function () {
+  var options = this.options;
+  var callback = this.callback;
+
+  if (options &&
+      !options.catalog && !options.service && !options.type &&
+      !options.url ) {
+    if (this.callback) {
+      callback('Must provide at least a feature service "catalog", "service" and "type", or a "url" to a feature service or feature layer');
+    }
+
+    return;
+  }
+
+  this.url = this.buildUrl();
+
+  this.token = options.token;
+
+  this.issueRequest(null, {
+    f: options.format || 'json'
+  }, callback);
+};
+
+
+// internal callback wrapper for err logic
+function _internalCallback(err, data, cb){
+  if (cb) {
+    // check for an error passed in this response
+    if (data && data.error ) {
+      cb( data.error, null);
+    } else {
+      cb( err, data );
+    }
+  }
+}
+
+FeatureService.prototype.issueRequest = function (endPoint, parameters, cb, method) {
+  parameters.f = parameters.f || 'json';
+  parameters.outFields = parameters.outFields || '*';
+  parameters.token = parameters.token || this.token;
+
+  var urlPart = '';
+
+  if (endPoint && endPoint !== 'base') {
+    urlPart = '/' + endPoint;
+  }
+
+  var url = this.url + urlPart;
+
+  if (!method || method.toLowerCase() === "get") {
+    url = url + '?' + stringify(parameters);
+
+    this.requestHandler.get(url, function(err, data){
+      _internalCallback(err, data, cb);
+    });
+  } else {
+    this.requestHandler.post(url, parameters, function(err, data) {
+      _internalCallback(err, data, cb);
+    });
+  }
+};
+
+// issues a query to the server
+FeatureService.prototype.query = function (parameters, callback) {
+  this.lastQuery = parameters;
+  var method = parameters.method || 'get';
+  delete parameters.method;
+  this.issueRequest('query', parameters, callback, method);
+};
+
+// issues a count only query to the server
+FeatureService.prototype.count = function (parameters, callback) {
+  parameters.returnCountOnly = true;
+  parameters.returnIdsOnly = false;
+  this.query(parameters, callback);
+};
+
+// issues an id's only query to the server
+FeatureService.prototype.ids = function (parameters, callback) {
+  parameters.returnIdsOnly = true;
+  parameters.returnCountOnly = false;
+  this.query(parameters, callback);
+};
+
+// issues an update request on the feature service
+FeatureService.prototype.update = function (parameters, callback) {
+  this.issueRequest('updateFeatures', parameters, callback, 'post');
+};
+
+// issues an add request on the feature service
+FeatureService.prototype.add = function (parameters, callback) {
+  this.issueRequest('addFeatures', parameters, callback, 'post');
+};
+
+// issues a remove request on the feature service
+FeatureService.prototype.remove = function (parameters, callback) {
+  this.issueRequest('deleteFeatures', parameters, callback, 'post');
+};
+
+// issues an edit request on the feature service
+// this applies adds, updates, and deletes in a single request
+FeatureService.prototype.edit = function (parameters, callback) {
+  issueRequest('applyEdits', parameters, callback, 'post');
+};
+
 function geocode (parameters, callback) {
   parameters.f = parameters.f || "json";
 
@@ -202,7 +207,9 @@ function reverse (parameters, callback) {
 }
 
 function addresses (parameters, callback) {
-  parameters.f = parameters.f || "json";
+  if (!parameters.f) {
+    parameters.f = 'json';
+  }
 
   //build the request url
   var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?';
@@ -213,8 +220,12 @@ function addresses (parameters, callback) {
     delete parameters.text;
   }
   //at very least you need the Addr_type attribute returned with results
-  parameters.outFields = parameters.outFields || 'Addr_type';
-  if (parameters.outFields !== '*' && parameters.outFields.indexOf('Addr_type') < 0) {
+  if (!parameters.outFields) {
+    parameters.outFields = "Addr_type";
+  }
+
+  if (parameters.outFields !== '*' && 
+    parameters.outFields.indexOf('Addr_type') < 0) {
     parameters.outFields += ',Addr_type';
   }
 
@@ -229,7 +240,7 @@ function Batch (token) {
 }
 
 Batch.prototype.geocode = function (data, optionalId) {
-  if (optionalId === undefined || optionalId === null) {
+  if (!optionalId) {
     optionalId = this.data.length + 1;
   }
 
@@ -242,7 +253,7 @@ Batch.prototype.geocode = function (data, optionalId) {
     };
   }
 
-  this.data.push({ attributes: data});
+  this.data.push({ attributes: data });
 };
 
 Batch.prototype.setToken = function (token) {
@@ -250,16 +261,20 @@ Batch.prototype.setToken = function (token) {
 };
 
 Batch.prototype.run = function (callback) {
-  if (this.token === undefined || this.token === null ||
-      this.token.token === undefined || this.token.token === null ||
-      this.token.expires < +new Date()) {
+  var current = new Date();
+
+  if (!this.token ||
+      !this.token.token ||
+      this.token.expires < current) {
     callback("Valid authentication token is required");
   } else {
+    var internal = JSON.stringify({
+      records: this.data
+    });
+
     var data = {
       token: this.token.token,
-      addresses: JSON.stringify({
-        records: this.data
-      }),
+      addresses: internal,
       f: "json",
       referer: "arcgis-node"
     };

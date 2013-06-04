@@ -41,9 +41,9 @@ module.exports = function (grunt) {
         options: {
           jsLintXML: 'report.xml', // create XML JSLint-like report
           errorsOnly: false, // show only maintainability errors
-          cyclomatic: 3,
-          halstead: 8,
-          maintainability: 100
+          cyclomatic: 5,
+          halstead: 15,
+          maintainability: 65
         }
       }
     },
