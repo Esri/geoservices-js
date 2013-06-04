@@ -69,28 +69,32 @@ function FeatureService (options, callback) {
 
 FeatureService.prototype.get = function () {
   var url;
+  var options = this.options;
+  var callback = this.callback;
 
-  if (!this.options &&
-      (!this.options.catalog && !this.options.service && !this.options.type) &&
-      !this.options.url ) {
+  if (options &&
+      !options.catalog && !options.service && !options.type &&
+      !options.url ) {
     if (this.callback) {
-      this.callback('Must provide at least a feature service "catalog", "service" and "type", or a "url" to a feature service or feature layer');
-    }
-  } else {
-    if (this.options.url) {
-      url = this.options.url;
-    } else {
-      url = [ this.options.catalog, this.options.service, this.options.type ].join('/') + (this.options.layer ? '/' + this.options.layer : '');
+      callback('Must provide at least a feature service "catalog", "service" and "type", or a "url" to a feature service or feature layer');
     }
 
-    this.url = url;
-
-    this.token = this.options.token;
-
-    this.issueRequest(null, {
-      f: this.options.format || 'json'
-    }, this.callback);
+    return;
   }
+
+  if (options.url) {
+    url = options.url;
+  } else {
+    url = [ options.catalog, options.service, options.type ].join('/') + (options.layer ? '/' + options.layer : '');
+  }
+
+  this.url = url;
+
+  this.token = options.token;
+
+  this.issueRequest(null, {
+    f: options.format || 'json'
+  }, callback);
 };
 
 
@@ -109,20 +113,24 @@ function _internalCallback(err, data, cb){
 FeatureService.prototype.issueRequest = function (endPoint, parameters, cb, method) {
   parameters.f = parameters.f || 'json';
   parameters.outFields = parameters.outFields || '*';
-  if (this.token && !parameters.token) {
-    parameters.token = this.token;
+  parameters.token = parameters.token || this.token;
+
+  var urlPart = '';
+
+  if (endPoint && endPoint !== 'base') {
+    urlPart = '/' + endPoint;
   }
 
-  var handler = this.requestHandler;
+  var url = this.url + urlPart;
 
-  var url = this.url + (endPoint && endPoint !== 'base' ? '/' + endPoint : '');
   if (!method || method.toLowerCase() === "get") {
-    url += '?' + stringify(parameters);
-    handler.get(url, function(err, data){
+    url = url + '?' + stringify(parameters);
+
+    this.requestHandler.get(url, function(err, data){
       _internalCallback(err, data, cb);
     });
   } else {
-    handler[method](url, parameters, function(err, data) {
+    this.requestHandler.post(url, parameters, function(err, data) {
       _internalCallback(err, data, cb);
     });
   }
