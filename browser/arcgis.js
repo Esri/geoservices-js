@@ -67,8 +67,21 @@ function FeatureService (options, callback) {
   this.get();
 }
 
-FeatureService.prototype.get = function () {
+FeatureService.prototype.buildUrl = function () {
+  var options = this.options;
+
   var url;
+
+  if (options.url) {
+    url = options.url;
+  } else {
+    url = [ options.catalog, options.service, options.type ].join('/') + (options.layer ? '/' + options.layer : '');
+  }
+
+  return url;
+};
+
+FeatureService.prototype.get = function () {
   var options = this.options;
   var callback = this.callback;
 
@@ -82,13 +95,7 @@ FeatureService.prototype.get = function () {
     return;
   }
 
-  if (options.url) {
-    url = options.url;
-  } else {
-    url = [ options.catalog, options.service, options.type ].join('/') + (options.layer ? '/' + options.layer : '');
-  }
-
-  this.url = url;
+  this.url = this.buildUrl();
 
   this.token = options.token;
 
