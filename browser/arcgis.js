@@ -124,7 +124,7 @@ FeatureService.prototype.issueRequest = function (endPoint, parameters, cb, meth
 
   var urlPart = '';
 
-  if (endPoint && endPoint !== 'base') {
+  if (endPoint) {
     urlPart = '/' + endPoint;
   }
 
@@ -137,6 +137,8 @@ FeatureService.prototype.issueRequest = function (endPoint, parameters, cb, meth
       _internalCallback(err, data, cb);
     });
   } else {
+    //assuming method is POST
+    //TODO: change this to use method values if there are feature service operations that use PUT or DELETE
     this.requestHandler.post(url, parameters, function(err, data) {
       _internalCallback(err, data, cb);
     });
