@@ -1,6 +1,10 @@
 function authenticate (username, password, options, callback) {
   var url = "https://www.arcgis.com/sharing/generateToken";
 
+  if (this.options && this.options.authenticationUrl) {
+    url = this.options.authenticationUrl;
+  }
+
   var data = {
     username: username,
     password: password,
