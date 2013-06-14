@@ -4,8 +4,7 @@ function FeatureService (options, callback) {
   this.options   = options;
   this.callback  = callback;
 
-  this.requestHandler = exports.requestHandler;
-
+  this.requestHandler = { get: get, post: post };
   this.get();
 }
 
