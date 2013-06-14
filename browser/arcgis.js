@@ -134,7 +134,9 @@ function _internalCallback(err, data, cb){
 FeatureService.prototype.issueRequest = function (endPoint, parameters, cb, method) {
   parameters.f = parameters.f || 'json';
   parameters.outFields = parameters.outFields || '*';
-  parameters.token = parameters.token || this.token;
+  if(parameters.token || this.token){
+    parameters.token = parameters.token || this.token;
+  }
 
   var urlPart = '';
 
