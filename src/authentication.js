@@ -1,3 +1,14 @@
+/**
+ * @module Geostore
+*/
+
+/**
+ * Authenticate a user against the Geostore Service for authenticated requests.
+ * @param {String} username your username
+ * @param {String} password your password
+ * @param {Object} options can be null
+ * @param {Function} callback to be called when authentication is complete
+*/
 function authenticate (username, password, options, callback) {
   var url = "https://www.arcgis.com/sharing/generateToken";
 
