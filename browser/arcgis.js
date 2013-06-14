@@ -30,6 +30,17 @@ function stringify (obj) {
   return qs.join('&');
 }
 
+/**
+ * @module Geostore
+*/
+
+/**
+ * Authenticate a user against the Geostore Service for authenticated requests.
+ * @param {String} username your username
+ * @param {String} password your password
+ * @param {Object} options can be null
+ * @param {Function} callback to be called when authentication is complete
+*/
 function authenticate (username, password, options, callback) {
   var url = "https://www.arcgis.com/sharing/generateToken";
 
@@ -66,8 +77,7 @@ function FeatureService (options, callback) {
   this.options   = options;
   this.callback  = callback;
 
-  this.requestHandler = exports.requestHandler;
-
+  this.requestHandler = { get: get, post: post };
   this.get();
 }
 
@@ -192,6 +202,12 @@ FeatureService.prototype.edit = function (parameters, callback) {
   issueRequest('applyEdits', parameters, callback, 'post');
 };
 
+/**
+ * @module Geostore
+*/
+/**
+ * @private
+*/
 function baseUrl(options) {
   var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer';
 
@@ -202,6 +218,12 @@ function baseUrl(options) {
   return url;
 }
 
+/**
+ * Access to a simple Geocode request
+ * @param {Object} parameters 
+ * @param {Function} callback to be called when geocode is complete
+ * geoservice.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, callback);
+*/
 function geocode (parameters, callback) {
   parameters.f = parameters.f || "json";
 
@@ -214,6 +236,11 @@ function geocode (parameters, callback) {
   this.requestHandler.get(url, callback);
 }
 
+/**
+ * Reverse Geocode
+ * @param {Object} parameters 
+ * @param {Function} callback to be called when reverse geocode is complete
+*/
 function reverse (parameters, callback) {
   parameters.f = parameters.f || "json";
 
