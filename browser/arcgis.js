@@ -398,6 +398,7 @@ function ArcGIS (options) {
   this.options = options;
 
   this.geocode = geocode;
+  this.reverseGeocode = reverse;
   this.FeatureService = FeatureService;
   this.authenticate   = authenticate;
   this.requestHandler = { get: get, post: post };
