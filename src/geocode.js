@@ -131,3 +131,7 @@ Batch.prototype.run = function (callback) {
     this.requestHandler.post(url, data, callback);
   }
 };
+
+geocode.simple  = geocode;
+geocode.reverse = reverse;
+geocode.addresses = addresses;
