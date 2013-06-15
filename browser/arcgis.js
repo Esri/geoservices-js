@@ -338,6 +338,9 @@ Batch.prototype.run = function (callback) {
   }
 };
 
+geocode.simple  = geocode;
+geocode.reverse = reverse;
+geocode.addresses = addresses;
 
 function get (url, callback) {
   var httpRequest = new XMLHttpRequest();
@@ -398,7 +401,6 @@ function ArcGIS (options) {
   this.options = options;
 
   this.geocode = geocode;
-  this.geocode.reverse = reverse;
   this.FeatureService = FeatureService;
   this.authenticate   = authenticate;
   this.requestHandler = { get: get, post: post };
