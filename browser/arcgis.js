@@ -345,11 +345,12 @@ function get (url, callback) {
   function requestHandler () {
     if (this.readyState === this.DONE) {
       if (this.status === 200) {
+        var response = JSON.parse(this.responseText);
         try {
-          var response = JSON.parse(this.responseText);
           callback(null, response);
         } catch (err) {
-          callback("Invalid JSON on response");
+         	err.error = response.error;
+          callback(err);
         }
       }
     }
@@ -371,11 +372,12 @@ function post (url, data, callback) {
   function requestHandler () {
     if (this.readyState === this.DONE) {
       if (this.status === 200) {
+        var response = JSON.parse(this.responseText);
         try {
-          var response = JSON.parse(this.responseText);
           callback(null, response);
         } catch (err) {
-          callback("Invalid JSON on response");
+          err.error = response.error;
+          callback(err);
         }
       }
     }
@@ -398,6 +400,7 @@ function ArcGIS (options) {
   this.options = options;
 
   this.geocode = geocode;
+  this.reverseGeocode = reverse;
   this.FeatureService = FeatureService;
   this.authenticate   = authenticate;
   this.requestHandler = { get: get, post: post };
