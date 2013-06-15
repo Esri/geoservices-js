@@ -1,18 +1,49 @@
+/**
+ * @module Geostore
+*/
+/**
+ * @private
+*/
+function baseUrl(options) {
+  var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer';
+
+  if (options && options.geocoderUrl) {
+    url = options.geocoderUrl;
+  }
+
+  return url;
+}
+
+/**
+ * Access to a simple Geocode request
+ * @param {Object} parameters 
+ * @param {Function} callback to be called when geocode is complete
+ * geoservice.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, callback);
+*/
 function geocode (parameters, callback) {
   parameters.f = parameters.f || "json";
 
   // build the request url
-  var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find?';
+  var url = baseUrl(this.options);
+  url += '/find?';
+
   url += stringify(parameters);
 
   this.requestHandler.get(url, callback);
 }
 
+/**
+ * Reverse Geocode
+ * @param {Object} parameters 
+ * @param {Function} callback to be called when reverse geocode is complete
+*/
 function reverse (parameters, callback) {
   parameters.f = parameters.f || "json";
 
   // build the request url
-  var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?';
+  var url = baseUrl(this.options);
+
+  url += '/reverseGeocode?';
   url += stringify(parameters);
 
   this.requestHandler.get(url, callback);
@@ -24,7 +55,9 @@ function addresses (parameters, callback) {
   }
 
   //build the request url
-  var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?';
+  var url = baseUrl(this.options);
+
+  url += '/findAddressCandidates?';
 
   //allow a text query like simple geocode service to return all candidate addresses
   if (parameters.text) {
@@ -91,6 +124,10 @@ Batch.prototype.run = function (callback) {
       referer: "arcgis-node"
     };
 
-    this.requestHandler.post("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/geocodeAddresses", data, callback);
+    var url = baseUrl(this.options);
+
+    url += "/geocodeAddresses";  
+
+    this.requestHandler.post(url, data, callback);
   }
 };

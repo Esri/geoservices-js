@@ -15,7 +15,7 @@ module.exports = function (grunt) {
       node: {
         files: {
           'lib/authentication.js': [ 'src/authentication.js', 'src/partials/node/authentication-tail.js' ],
-          'lib/featureservice.js': [ 'src/partials/node/querystring.js', 'src/featureservice.js', 'src/partials/node/featureservice-tail.js' ],
+          'lib/featureservice.js': [ 'src/partials/node/querystring.js', 'src/partials/node/request-head.js', 'src/request.js', 'src/featureservice.js', 'src/partials/node/featureservice-tail.js' ],
           'lib/geocode.js': [ 'src/partials/node/querystring.js', 'src/geocode.js', 'src/partials/node/geocode-tail.js' ],
           'lib/request.js': [ 'src/partials/node/querystring.js', 'src/partials/node/request-head.js', 'src/request.js', 'src/partials/node/request-tail.js' ]
         }
@@ -42,8 +42,8 @@ module.exports = function (grunt) {
           jsLintXML: 'report.xml', // create XML JSLint-like report
           errorsOnly: false, // show only maintainability errors
           cyclomatic: 5,
-          halstead: 13,
-          maintainability: 100
+          halstead: 15,
+          maintainability: 65
         }
       }
     },

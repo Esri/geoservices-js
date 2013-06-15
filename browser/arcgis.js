@@ -30,8 +30,23 @@ function stringify (obj) {
   return qs.join('&');
 }
 
+/**
+ * @module Geostore
+*/
+
+/**
+ * Authenticate a user against the Geostore Service for authenticated requests.
+ * @param {String} username your username
+ * @param {String} password your password
+ * @param {Object} options can be null
+ * @param {Function} callback to be called when authentication is complete
+*/
 function authenticate (username, password, options, callback) {
   var url = "https://www.arcgis.com/sharing/generateToken";
+
+  if (this.options && this.options.authenticationUrl) {
+    url = this.options.authenticationUrl;
+  }
 
   var data = {
     username: username,
@@ -56,146 +71,183 @@ function authenticate (username, password, options, callback) {
   this.requestHandler.post(url, data, internalCallback);
 }
 
-function FeatureService(options, callback) {
+function FeatureService (options, callback) {
+  this.lastQuery = null;
+  this.url       = null;
+  this.options   = options;
+  this.callback  = callback;
 
-  var _featureservice = {
-    query: query,
-    update: update,
-    edit: edit,
-    count: count,
-    add: add,
-    remove: remove,
-    ids: ids,
-    lastQuery: null,
-    url: null
-  };
-
-  var requestHandler = this.requestHandler;
-
-  // retrieves the service metadata
-  function get() {
-    var url;
-    if (!options && (!options.catalog && !options.service && !options.type) && !options.url ) {
-      if (callback) {
-        callback('Must provide at least a feature service "catalog", "service" and "type", or a "url" to a feature service or feature layer');
-      }
-    }
-
-    if(options.url){
-      url = options.url;
-    } else {
-      url = [options.catalog, options.service, options.type].join('/') + (options.layer ? '/' + options.layer : '');
-    }
-
-    _featureservice.url = url;
-
-    _featureservice.token = options.token;
-
-    issueRequest(null, {
-      f: options.format || 'json'
-    }, callback);
-  }
-
-  // internal callback wrapper for err logic
-  function _internalCallback(err, data, cb){
-    if (cb) {
-      // check for an error passed in this response
-      if (data && data.error ) {
-        cb( data.error, null);
-      } else {
-        cb( err, data );
-      }
-    }
-  }
-
-  function issueRequest(endPoint, parameters, cb, method) {
-    parameters.f = parameters.f || 'json';
-    parameters.outFields = parameters.outFields || '*';
-    if (_featureservice.token && !parameters.token) {
-      parameters.token = _featureservice.token;
-    }
-    var url = _featureservice.url + (endPoint && endPoint !== 'base' ? '/' + endPoint : '');
-    if (!method || method.toLowerCase() === "get") {
-      url += '?' + stringify(parameters);
-      requestHandler.get(url, function(err, data){
-        _internalCallback(err, data, cb);
-      });
-    } else {
-      requestHandler[method](url, parameters, function(err, data) {
-        _internalCallback(err, data, cb);
-      });
-    }
-  }
-
-  // issues a query to the server
-  function query(parameters, callback) {
-    _featureservice.lastQuery = parameters;
-    var method = parameters.method || 'get';
-    delete parameters.method;
-    issueRequest('query', parameters, callback, method);
-  }
-
-  // issues a count only query to the server
-
-  function count(parameters, callback) {
-    parameters.returnCountOnly = true;
-    parameters.returnIdsOnly = false;
-    query(parameters, callback);
-  }
-
-  // issues an id's only query to the server
-
-  function ids(parameters, callback) {
-    parameters.returnIdsOnly = true;
-    parameters.returnCountOnly = false;
-    query(parameters, callback);
-  }
-
-  // issues an update request on the feature service
-
-  function update(parameters, callback) {
-    issueRequest('updateFeatures', parameters, callback, 'post');
-  }
-
-  // issues an add request on the feature service
-
-  function add(parameters, callback) {
-    issueRequest('addFeatures', parameters, callback, 'post');
-  }
-
-  // issues a remove request on the feature service
-
-  function remove(parameters, callback) {
-    issueRequest('deleteFeatures', parameters, callback, 'post');
-  }
-
-  // issues an edit request on the feature service
-  // this applies adds, updates, and deletes in a single request
-
-  function edit(parameters, callback) {
-    issueRequest('applyEdits', parameters, callback, 'post');
-  }
-
-  get();
-
-  return _featureservice;
-
+  this.requestHandler = { get: get, post: post };
+  this.get();
 }
+
+FeatureService.prototype.buildUrl = function () {
+  var options = this.options;
+
+  var url;
+
+  if (options.url) {
+    url = options.url;
+  } else {
+    url = [ options.catalog, options.service, options.type ].join('/') + (options.layer ? '/' + options.layer : '');
+  }
+
+  return url;
+};
+
+FeatureService.prototype.get = function () {
+  var options = this.options;
+  var callback = this.callback;
+
+  if (options &&
+      !options.catalog && !options.service && !options.type &&
+      !options.url ) {
+    if (this.callback) {
+      callback('Must provide at least a feature service "catalog", "service" and "type", or a "url" to a feature service or feature layer');
+    }
+
+    return;
+  }
+
+  this.url = this.buildUrl();
+
+  this.token = options.token;
+
+  this.issueRequest(null, {
+    f: options.format || 'json'
+  }, callback);
+};
+
+
+// internal callback wrapper for err logic
+function _internalCallback(err, data, cb){
+  if (cb) {
+    // check for an error passed in this response
+    if (data && data.error ) {
+      cb( data.error, null);
+    } else {
+      cb( err, data );
+    }
+  }
+}
+
+FeatureService.prototype.issueRequest = function (endPoint, parameters, cb, method) {
+  parameters.f = parameters.f || 'json';
+  parameters.outFields = parameters.outFields || '*';
+  parameters.token = parameters.token || this.token;
+
+  var urlPart = '';
+
+  if (endPoint) {
+    urlPart = '/' + endPoint;
+  }
+
+  var url = this.url + urlPart;
+
+  if (!method || method.toLowerCase() === "get") {
+    url = url + '?' + stringify(parameters);
+
+    this.requestHandler.get(url, function(err, data){
+      _internalCallback(err, data, cb);
+    });
+  } else {
+    //assuming method is POST
+    //TODO: change this to use method values if there are feature service operations that use PUT or DELETE
+    this.requestHandler.post(url, parameters, function(err, data) {
+      _internalCallback(err, data, cb);
+    });
+  }
+};
+
+// issues a query to the server
+FeatureService.prototype.query = function (parameters, callback) {
+  this.lastQuery = parameters;
+  var method = parameters.method || 'get';
+  delete parameters.method;
+  this.issueRequest('query', parameters, callback, method);
+};
+
+// issues a count only query to the server
+FeatureService.prototype.count = function (parameters, callback) {
+  parameters.returnCountOnly = true;
+  parameters.returnIdsOnly = false;
+  this.query(parameters, callback);
+};
+
+// issues an id's only query to the server
+FeatureService.prototype.ids = function (parameters, callback) {
+  parameters.returnIdsOnly = true;
+  parameters.returnCountOnly = false;
+  this.query(parameters, callback);
+};
+
+// issues an update request on the feature service
+FeatureService.prototype.update = function (parameters, callback) {
+  this.issueRequest('updateFeatures', parameters, callback, 'post');
+};
+
+// issues an add request on the feature service
+FeatureService.prototype.add = function (parameters, callback) {
+  this.issueRequest('addFeatures', parameters, callback, 'post');
+};
+
+// issues a remove request on the feature service
+FeatureService.prototype.remove = function (parameters, callback) {
+  this.issueRequest('deleteFeatures', parameters, callback, 'post');
+};
+
+// issues an edit request on the feature service
+// this applies adds, updates, and deletes in a single request
+FeatureService.prototype.edit = function (parameters, callback) {
+  issueRequest('applyEdits', parameters, callback, 'post');
+};
+
+/**
+ * @module Geostore
+*/
+/**
+ * @private
+*/
+function baseUrl(options) {
+  var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer';
+
+  if (options && options.geocoderUrl) {
+    url = options.geocoderUrl;
+  }
+
+  return url;
+}
+
+/**
+ * Access to a simple Geocode request
+ * @param {Object} parameters 
+ * @param {Function} callback to be called when geocode is complete
+ * geoservice.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, callback);
+*/
 function geocode (parameters, callback) {
   parameters.f = parameters.f || "json";
 
   // build the request url
-  var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/find?';
+  var url = baseUrl(this.options);
+  url += '/find?';
+
   url += stringify(parameters);
 
   this.requestHandler.get(url, callback);
 }
 
+/**
+ * Reverse Geocode
+ * @param {Object} parameters 
+ * @param {Function} callback to be called when reverse geocode is complete
+*/
 function reverse (parameters, callback) {
   parameters.f = parameters.f || "json";
 
   // build the request url
-  var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?';
+  var url = baseUrl(this.options);
+
+  url += '/reverseGeocode?';
   url += stringify(parameters);
 
   this.requestHandler.get(url, callback);
@@ -207,7 +259,9 @@ function addresses (parameters, callback) {
   }
 
   //build the request url
-  var url = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?';
+  var url = baseUrl(this.options);
+
+  url += '/findAddressCandidates?';
 
   //allow a text query like simple geocode service to return all candidate addresses
   if (parameters.text) {
@@ -274,7 +328,11 @@ Batch.prototype.run = function (callback) {
       referer: "arcgis-node"
     };
 
-    this.requestHandler.post("http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/geocodeAddresses", data, callback);
+    var url = baseUrl(this.options);
+
+    url += "/geocodeAddresses";  
+
+    this.requestHandler.post(url, data, callback);
   }
 };
 
@@ -300,7 +358,7 @@ function get (url, callback) {
   httpRequest.open("GET", url);
   if (httpRequest.setDisableHeaderCheck !== undefined) {
     httpRequest.setDisableHeaderCheck(true);
-    httpRequest.setRequestHeader("Referer", "arcgis-node");
+    httpRequest.setRequestHeader("Referer", "geoservices-js");
   }
   httpRequest.send(null);
 }
@@ -326,7 +384,7 @@ function post (url, data, callback) {
   httpRequest.open("POST", url);
   if (httpRequest.setDisableHeaderCheck !== undefined) {
     httpRequest.setDisableHeaderCheck(true);
-    httpRequest.setRequestHeader("Referer", "arcgis-node");
+    httpRequest.setRequestHeader("Referer", "geoservices-js");
   }
   
   httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
