@@ -132,6 +132,10 @@ Batch.prototype.run = function (callback) {
   }
 };
 
+reverse.requestHandler = { get: get, post: post };
+geocode.requestHandler = { get: get, post: post };
+addresses.requestHandler = { get: get, post: post };
+
 geocode.simple  = geocode;
 geocode.reverse = reverse;
 geocode.addresses = addresses;
