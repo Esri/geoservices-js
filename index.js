@@ -3,7 +3,7 @@ var geocode        = require('./lib/geocode'),
     authentication = require('./lib/authentication'),
     request        = require('./lib/request');
 
-function ArcGIS (options) {
+function Geoservices (options) {
   this.options = options;
 
   this.geocode = geocode.geocode;
@@ -23,4 +23,4 @@ function ArcGIS (options) {
   };
 }
 
-module.exports = exports = ArcGIS;
+module.exports = exports = Geoservices;

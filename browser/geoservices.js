@@ -6,7 +6,7 @@
 
   // Browser Global.
   if(typeof window === "object") {
-    root.Esri = factory();
+    root.Geoservices = factory();
   }
 
 }(this, function () {
@@ -356,7 +356,7 @@ function get (url, callback) {
           var response = JSON.parse(this.responseText);
           callback(null, response);
         } catch (err) {
-          callback("Invalid JSON on response");
+          callback("Invalid JSON on response: " + this.responseText);
         }
       }
     }
@@ -382,7 +382,7 @@ function post (url, data, callback) {
           var response = JSON.parse(this.responseText);
           callback(null, response);
         } catch (err) {
-          callback("Invalid JSON on response");
+          callback("Invalid JSON on response: " + this.responseText);
         }
       }
     }
@@ -401,7 +401,7 @@ function post (url, data, callback) {
   httpRequest.send(stringify(data));
 }
 
-function ArcGIS (options) {
+function Geoservices (options) {
   this.options = options;
 
   this.geocode = geocode;
@@ -421,7 +421,7 @@ function ArcGIS (options) {
   };
 }
 
-exports.ArcGIS = ArcGIS;
+exports.Geoservices = Geoservices;
 
 return exports;
 }));

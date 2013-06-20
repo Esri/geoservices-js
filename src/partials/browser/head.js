@@ -6,7 +6,7 @@
 
   // Browser Global.
   if(typeof window === "object") {
-    root.Esri = factory();
+    root.Geoservices = factory();
   }
 
 }(this, function () {

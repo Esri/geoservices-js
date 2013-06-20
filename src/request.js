@@ -9,7 +9,7 @@ function get (url, callback) {
           var response = JSON.parse(this.responseText);
           callback(null, response);
         } catch (err) {
-          callback("Invalid JSON on response");
+          callback("Invalid JSON on response: " + this.responseText);
         }
       }
     }
@@ -35,7 +35,7 @@ function post (url, data, callback) {
           var response = JSON.parse(this.responseText);
           callback(null, response);
         } catch (err) {
-          callback("Invalid JSON on response");
+          callback("Invalid JSON on response: " + this.responseText);
         }
       }
     }
