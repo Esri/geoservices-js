@@ -1,6 +1,6 @@
 # Getting Started
 
-This module exposes both authenticated and non-authenticated aspects of [ArcGIS Online](http://www.arcgis.com/).
+This module exposes both authenticated and non-authenticated aspects of Geoservices such as [ArcGIS Online](http://www.arcgis.com/).
 
 ## Non-authenticated Services
 
@@ -12,17 +12,22 @@ This module exposes both authenticated and non-authenticated aspects of [ArcGIS 
 ## Authenticated Services
 
 * Bulk Geocoding
-* Directions
-* Routing
+
+## Using in the Browser
+
+    <script src="browser/geoservices.js"></script>
+    <script>
+      var client = new Geoservices();
+    </script>
 
 ## Using in Node.js
 
 ### Installing
 
-    $ npm install arcgis
+    $ npm install geoservices
 
 ### Basic Usage
 
-    var ArcGIS = require('arcgis');
+    var Geoservices = require('geoservices');
     
-    var client = new ArcGIS();
+    var client = new Geoservices();

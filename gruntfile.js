@@ -22,7 +22,7 @@ module.exports = function (grunt) {
       },
       browser: {
         files: {
-          'browser/arcgis.js': [
+          'browser/geoservices.js': [
             'src/partials/browser/head.js',
             'src/partials/browser/querystring.js',
             'src/authentication.js',
