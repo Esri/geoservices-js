@@ -33,3 +33,6 @@ To build and run tests, simply run:
 Testing can also occur stand-alone:
 
     $ npm test
+
+[](Esri Tags: Geoservices Node.js Browser)
+[](Esri Language: JavaScript)
