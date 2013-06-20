@@ -1,4 +1,4 @@
-function ArcGIS (options) {
+function Geoservices (options) {
   this.options = options;
 
   this.geocode = geocode;
@@ -18,7 +18,7 @@ function ArcGIS (options) {
   };
 }
 
-exports.ArcGIS = ArcGIS;
+exports.Geoservices = Geoservices;
 
 return exports;
 }));

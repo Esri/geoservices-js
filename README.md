@@ -1,68 +1,26 @@
-# arcgis-node
+# Geoservices-js
 
-Node.js bindings for ArcGIS Online
+Javascript bindings for Geoservices.  For more information see the Geoservices Specification available at http://www.esri.com/library/whitepapers/pdfs/geoservices-rest-spec.pdf
 
 ## Usage
 
-    var ArcGIS = require('arcgis');
+### Browser
+
+    <script src="browser/geoservices.js"></script>
+    <script>
+      var client = new Geoservices();
+    </script>
+
+### Node.js
+
+    var Geoservices = require('geoservices');
     
-    var client = new ArcGIS({ /* optional credentials */ });
+    var client = new Geosercices();
 
-### Geocoding
-
-By default, geocoding uses simple single input field geocoding:
-
-    client.geocode({ text: "920 SW 3rd Ave, Portland, OR 97201" }, function (err, result) {
-      if (err) {
-        console.error("ERROR: " + err);
-      } else {
-        console.log("Found it at " + result.locations[0].feature.geometry.y + ", " result.locations[0].feature.geometry.x);
-      }
-    });
-
-#### Simple Geocoding
-
-Simple geocoding is the same as the default `geocode` method:
-
-    client.geocode.simple({ text: "920 SW 3rd Ave, Portland, OR 97201" }, function (err, result) {
-      if (err) {
-        console.error("ERROR: " + err);
-      } else {
-        console.log("Found it at " + result.locations[0].feature.geometry.y + ", " result.locations[0].feature.geometry.x);
-      }
-    });
-
-#### Reverse Geocoding
-
-      geocode.geocode.reverse({ location: "-122.67633658436517,45.5167324388521" }, function (err, result) {
-      if (err) {
-        console.error("ERROR: " + err);
-      } else {
-        console.log("Found it at " + result.address.Address + ", " + result.address.City);
-      }
-    });
-
-### FeatureService 
-
-A Very simple way to access a feature service: 
-
-    var params = {
-      catalog: 'http://servicesdev.arcgis.com/.../arcgis/rest/services',
-      service: 'hospitals',
-      format: 'json'
-    }
-
-    client.featureservice( params, function( err, result ){
-      if (err) {
-        console.error("ERROR: " + err);
-      } else {
-        console.log( result );
-      }
-    })
 
 ## Building
 
-ArcGIS-Node uses `grunt` for its build system.  To install:
+Geoservices uses `grunt` for its build system.  To install:
 
     $ sudo npm install -g grunt-cli
 
