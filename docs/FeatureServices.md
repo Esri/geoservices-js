@@ -72,7 +72,7 @@ Feature Services are very deep and powerful. We can pass any supported parameter
     };
 
     var fs = client.FeatureService( params , function(err, data){
-      fs.query({f: 'json'}, function( err, result ){
+      fs.query( query_params, function( err, result ){
         if (err) {
           console.error("ERROR: " + err);
         } else {
