@@ -1,19 +1,20 @@
 {
-  "name": "arcgis",
+  "name": "geoservices",
   "version": "0.1.0",
-  "description": "Bindings for ArcGIS Online",
+  "description": "Javascript Bindings for Geoservices",
   "main": "index.js",
   "scripts": {
     "test": "vows --spec"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/ArcGIS/arcgis-node.git"
+    "url": "git://github.com/Esri/Geoservices-js.git"
   },
   "keywords": [
     "gis",
     "esri",
-    "arcgis"
+    "arcgis",
+    "geoservices"
   ],
   "dependencies": {
     "xmlhttprequest": "1.5.x",

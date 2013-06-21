@@ -9,7 +9,7 @@ function get (url, callback) {
           var response = JSON.parse(this.responseText);
           callback(null, response);
         } catch (err) {
-          callback("Invalid JSON on response");
+          callback("Invalid JSON on response: " + this.responseText);
         }
       }
     }
@@ -20,7 +20,7 @@ function get (url, callback) {
   httpRequest.open("GET", url);
   if (httpRequest.setDisableHeaderCheck !== undefined) {
     httpRequest.setDisableHeaderCheck(true);
-    httpRequest.setRequestHeader("Referer", "arcgis-node");
+    httpRequest.setRequestHeader("Referer", "geoservices-js");
   }
   httpRequest.send(null);
 }
@@ -35,7 +35,7 @@ function post (url, data, callback) {
           var response = JSON.parse(this.responseText);
           callback(null, response);
         } catch (err) {
-          callback("Invalid JSON on response");
+          callback("Invalid JSON on response: " + this.responseText);
         }
       }
     }
@@ -46,7 +46,7 @@ function post (url, data, callback) {
   httpRequest.open("POST", url);
   if (httpRequest.setDisableHeaderCheck !== undefined) {
     httpRequest.setDisableHeaderCheck(true);
-    httpRequest.setRequestHeader("Referer", "arcgis-node");
+    httpRequest.setRequestHeader("Referer", "geoservices-js");
   }
   
   httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
