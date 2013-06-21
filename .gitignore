@@ -1,1 +1,8 @@
 node_modules
+.DS_Store
+Icon
+._*
+.Spotlight-V100
+# SublimeText
+/*.sublime-project
+*.sublime-workspace

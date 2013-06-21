@@ -16,7 +16,8 @@
     "arcgis"
   ],
   "dependencies": {
-    "xmlhttprequest": "1.5.x"
+    "xmlhttprequest": "1.5.x",
+    "grunt-complexity": "~0.1.2"
   },
   "devDependencies": {
     "vows": ">=0.7.0",
