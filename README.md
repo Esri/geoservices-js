@@ -15,7 +15,7 @@ Javascript bindings for Geoservices.  For more information see the Geoservices S
 
     var Geoservices = require('geoservices');
     
-    var client = new Geosercices();
+    var client = new Geoservices();
 
 
 ## Building
