@@ -34,5 +34,8 @@ Testing can also occur stand-alone:
 
     $ npm test
 
+This is an open library for communicating with any service that implements the Geoservices specification.  The default endpoint for Geocoding is ArcGIS Online.  Please see [http://resources.arcgis.com/en/help/arcgis-rest-api/#/ArcGIS_Online_services_licensing/02r3000001mv000000/](Terms of Use) for licensing and usage details.
+
+
 [](Esri Tags: Geoservices Node.js Browser)
 [](Esri Language: JavaScript)
