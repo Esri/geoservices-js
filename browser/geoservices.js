@@ -1,4 +1,4 @@
-(function (root, factory) {
+((function (root, factory) {
   // AMD.
   if(typeof define === 'function' && define.amd) {
     define(factory);
@@ -71,51 +71,51 @@ function authenticate (username, password, options, callback) {
   this.requestHandler.post(url, data, internalCallback);
 }
 
+
 function Server (options, callback) {
-  this.url       = options.url;
-  this.options   = options;
+  this.options   = options || {};
+  this.url       = this.options.url || "";
   this.callback  = callback;
+  
+  //this.token = options.token || "";
 
-  this.requestHandler = { get: get, post: post };
+  // Set up jsonp handler
+  window.Geoservices.Server = {
+    _callback: function (results) {
+      this._internalCallback(results);
+    },
+    _internalCallback: null
+  }
 
-  this.token = options.token;
-
-  this.issueRequest(null, {
-    f: options.format || 'json'
-  }, callback);
+  if (this.options.url && callback){
+    this.get(this.options.url, callback);
+  }
 }
 
-Server.prototype.issueRequest = function (endPoint, parameters, cb, method) {
-  parameters.f = parameters.f || 'json';
-  //parameters.outFields = parameters.outFields || '*';  
-  if(parameters.token || this.token){
-    parameters.token = parameters.token || this.token;
+Server.prototype.get = function(options, callback) {
+  if (!options.url) {
+    if (callback) {
+      callback("Invalid URL to server.")
+    } else {
+      console.log("Invalid callback function.")
+    }
+    return;
   }
 
-  var urlPart = '';
+  // TODO - support other params
+  
+  // Wire up callback handler
+  window.Geoservices.Server._internalCallback = callback;
 
-  if (endPoint) {
-    urlPart = '/' + endPoint;
-  }
-
-  var url = this.url + urlPart;
-
-  if (!method || method.toLowerCase() === "get") {
-    //url = url + '?' + stringify(parameters);
-    url = url + '?' + stringify(parameters) + "&callback=";
-
-    this.requestHandler.get(url, function(err, data){
-      _internalCallback(err, data, cb);
-    });
-  } else {
-    //assuming method is POST
-    //TODO: change this to use method values if there are feature service operations that use PUT or DELETE
-    this.requestHandler.post(url, parameters, function(err, data) {
-      _internalCallback(err, data, cb);
-    });
+  // jsonp call
+  try {
+    var scriptTag = document.createElement('SCRIPT');
+    scriptTag.src = options.url+"?f=json&callback=window.Geoservices.Server._callback"; 
+    document.getElementsByTagName('HEAD')[0].appendChild(scriptTag);
+  } catch (e) {
+    console.log(e);
   }
 };
-
 
 function FeatureService (options, callback) {
   this.lastQuery = null;
@@ -249,9 +249,6 @@ FeatureService.prototype.remove = function (parameters, callback) {
 FeatureService.prototype.edit = function (parameters, callback) {
   issueRequest('applyEdits', parameters, callback, 'post');
 };
-FeatureService.prototype.server = function (parameters, callback) {  // Als
-  issueRequest('catalog', parameters, callback, 'post');
-};
 
 /**
  * @module Geostore
@@ -269,16 +266,9 @@ function baseUrl(options) {
   return url;
 }
 
-function server(parameters, callback) {
-  parameters.f = parameters.f || "json";
-  var url = stringify(parameters);
-
-  this.requestHandler.get(url, callback);
-}
-
 /**
  * Access to a simple Geocode request
- * @param {Object} parameters
+ * @param {Object} parameters 
  * @param {Function} callback to be called when geocode is complete
  * geoservice.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, callback);
 */
@@ -296,7 +286,7 @@ function geocode (parameters, callback) {
 
 /**
  * Reverse Geocode
- * @param {Object} parameters
+ * @param {Object} parameters 
  * @param {Function} callback to be called when reverse geocode is complete
 */
 function reverse (parameters, callback) {
@@ -331,7 +321,7 @@ function addresses (parameters, callback) {
     parameters.outFields = "Addr_type";
   }
 
-  if (parameters.outFields !== '*' &&
+  if (parameters.outFields !== '*' && 
     parameters.outFields.indexOf('Addr_type') < 0) {
     parameters.outFields += ',Addr_type';
   }
@@ -388,7 +378,7 @@ Batch.prototype.run = function (callback) {
 
     var url = baseUrl(this.options);
 
-    url += "/geocodeAddresses";
+    url += "/geocodeAddresses";  
 
     this.requestHandler.post(url, data, callback);
   }
@@ -420,7 +410,7 @@ function get (url, callback) {
 
   httpRequest.onreadystatechange = requestHandler;
 
-  httpRequest.open("GET", url, true);  // Added support for allow all
+  httpRequest.open("GET", url);
   if (httpRequest.setDisableHeaderCheck !== undefined) {
     httpRequest.setDisableHeaderCheck(true);
     httpRequest.setRequestHeader("Referer", "geoservices-js");
@@ -451,7 +441,7 @@ function post (url, data, callback) {
     httpRequest.setDisableHeaderCheck(true);
     httpRequest.setRequestHeader("Referer", "geoservices-js");
   }
-
+  
   httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
   httpRequest.send(stringify(data));
