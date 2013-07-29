@@ -23,8 +23,13 @@ function authenticate (username, password, options, callback) {
     referer:  "arcgis-node"
   };
 
-  if (options && options.expiration) {
-    data.expiration = options.expiration;
+  if (options) {
+    if (options.expiration){
+      data.expiration = options.expiration;
+    }
+    if (options.referer){
+      data.referer = options.referer;
+    }
   }
 
   var self = this;
