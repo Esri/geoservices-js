@@ -1,6 +1,6 @@
 {
   "name": "geoservices",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Javascript Bindings for Geoservices",
   "main": "index.js",
   "scripts": {
@@ -17,8 +17,7 @@
     "geoservices"
   ],
   "dependencies": {
-    "xmlhttprequest": "1.5.x",
-    "grunt-complexity": "~0.1.2"
+    "xmlhttprequest": "1.5.x"
   },
   "devDependencies": {
     "vows": ">=0.7.0",
@@ -26,7 +25,8 @@
     "grunt-contrib-jshint": "0.3.x",
     "grunt-contrib-copy": "0.4.x",
     "grunt-contrib-concat": "~0.2.0",
-    "grunt-vows": "0.4.x"
+    "grunt-vows": "0.4.x",
+    "grunt-complexity": "~0.1.2"
   },
   "author": "",
   "license": "Apache",
