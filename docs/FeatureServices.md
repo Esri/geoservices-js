@@ -7,12 +7,12 @@ Feature Services are the primary way of accessing vector features from Esri serv
 
     // make a request to a feature service
     client.FeatureService({
-        url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3" 
+        url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3'
       }, function ( err, result ) {
         if (err) {
           console.error("ERROR: " + err);
         } else {
-          console.log("Got the FeatureService Metadata: ', result );
+          console.log("Got the FeatureService Metadata: ", result );
         }
       });
 
@@ -37,7 +37,7 @@ Alternatively we can decompose the service url into params to provide more flexi
       if (err) {
         console.error("ERROR: " + err);
       } else {
-        console.log("Got the FeatureService Metadata: ', result );
+        console.log("Got the FeatureService Metadata: ", result );
       }
     });
 
@@ -55,7 +55,7 @@ Here we request the default feature service query for data
         if (err) {
           console.error("ERROR: " + err);
         } else {
-          console.log("Features: ', result );
+          console.log("Features: ", result );
         }
       });
     }); 
@@ -76,7 +76,7 @@ Feature Services are very deep and powerful. We can pass any supported parameter
         if (err) {
           console.error("ERROR: " + err);
         } else {
-          console.log("Features: ', result );
+          console.log("Features: ", result );
         }
       });
     });
