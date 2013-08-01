@@ -20,7 +20,7 @@ function authenticate (username, password, options, callback) {
     username: username,
     password: password,
     f:        "json",
-    referer:  "arcgis-node"
+    referer:  "geoservices-js"
   };
 
   if (options) {

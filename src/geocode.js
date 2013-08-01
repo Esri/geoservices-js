@@ -121,7 +121,7 @@ Batch.prototype.run = function (callback) {
       token: this.token.token,
       addresses: internal,
       f: "json",
-      referer: "arcgis-node"
+      referer: "geoservices-js"
     };
 
     var url = baseUrl(this.options);

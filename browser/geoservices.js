@@ -52,11 +52,16 @@ function authenticate (username, password, options, callback) {
     username: username,
     password: password,
     f:        "json",
-    referer:  "arcgis-node"
+    referer:  "geoservices-js"
   };
 
-  if (options && options.expiration) {
-    data.expiration = options.expiration;
+  if (options) {
+    if (options.expiration){
+      data.expiration = options.expiration;
+    }
+    if (options.referer){
+      data.referer = options.referer;
+    }
   }
 
   var self = this;
@@ -327,7 +332,7 @@ Batch.prototype.run = function (callback) {
       token: this.token.token,
       addresses: internal,
       f: "json",
-      referer: "arcgis-node"
+      referer: "geoservices-js"
     };
 
     var url = baseUrl(this.options);
