@@ -1,6 +1,6 @@
 {
   "name": "geoservices",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Javascript Bindings for Geoservices",
   "main": "index.js",
   "scripts": {
