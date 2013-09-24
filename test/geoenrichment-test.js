@@ -13,9 +13,9 @@ vows.describe('Geoenrichment').addBatch({
     'and no token is available': {
       topic: function () {
         var enrich = new geoenrichment.Enrich();
-        enrich.enrich({ studyAreas:[{"geometry":{"x":-117.1956,"y":34.0572}}],
-                  analysisVariables:["KeyGlobalFacts.TOTPOP"],
-                  studyAreasOptions:{"areaType":"RingBuffer","bufferUnits":"esriMiles","bufferRadii":[10]}});
+        enrich.setStudyAreas([{"geometry":{"x":-117.1956,"y":34.0572}}]);
+        enrich.setDataCollections(["KeyUSFacts"]);
+
         var callback = this.callback;
         enrich.run(function (err, data) {
           callback(null, err);
@@ -28,9 +28,8 @@ vows.describe('Geoenrichment').addBatch({
     'and the token is expired': {
       topic: function () {
         var enrich = new geoenrichment.Enrich({ token: "abc", expires: 123 });
-          enrich.enrich({ studyAreas:[{"geometry":{"x":-117.1956,"y":34.0572}}],
-                    analysisVariables:["KeyGlobalFacts.TOTPOP"],
-                    studyAreasOptions:{"areaType":"RingBuffer","bufferUnits":"esriMiles","bufferRadii":[10]}});
+        enrich.setStudyAreas([{"geometry":{"x":-117.1956,"y":34.0572}}]);
+        enrich.setDataCollections(["KeyUSFacts"]);
 
         var callback = this.callback;
           enrich.run(function (err, data) {
