@@ -357,7 +357,7 @@ geocode.addresses = addresses;
  * @private
 */
 function baseUrl(options) {
-  var url = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver/GeoEnrichment/';
+  var url = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver/GeoEnrichment';
 
   if (options && options.geocoderUrl) {
     url = options.geocoderUrl;
