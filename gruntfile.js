@@ -17,6 +17,7 @@ module.exports = function (grunt) {
           'lib/authentication.js': [ 'src/authentication.js', 'src/partials/node/authentication-tail.js' ],
           'lib/featureservice.js': [ 'src/partials/node/querystring.js', 'src/partials/node/request-head.js', 'src/request.js', 'src/featureservice.js', 'src/partials/node/featureservice-tail.js' ],
           'lib/geocode.js': [ 'src/partials/node/querystring.js', 'src/partials/node/request-head.js', 'src/request.js', 'src/geocode.js', 'src/partials/node/geocode-tail.js' ],
+          'lib/geoenrichment.js': [ 'src/partials/node/querystring.js', 'src/partials/node/request-head.js', 'src/request.js', 'src/geoenrichment.js', 'src/partials/node/geoenrichment-tail.js' ],
           'lib/request.js': [ 'src/partials/node/querystring.js', 'src/partials/node/request-head.js', 'src/request.js', 'src/partials/node/request-tail.js' ]
         }
       },
@@ -28,6 +29,7 @@ module.exports = function (grunt) {
             'src/authentication.js',
             'src/featureservice.js',
             'src/geocode.js',
+            'src/geoenrichment.js',
             'src/request.js',
             'src/partials/browser/tail.js'
           ]
@@ -37,7 +39,7 @@ module.exports = function (grunt) {
 
     complexity: {
       generic: {
-        src: [ 'lib/authentication.js', 'lib/featureservice.js', 'lib/geocode.js', 'lib/request.js' ],
+        src: [ 'lib/authentication.js', 'lib/featureservice.js', 'lib/geocode.js', 'lib/geoenrichment.js', 'lib/request.js' ],
         options: {
           jsLintXML: 'report.xml', // create XML JSLint-like report
           errorsOnly: false, // show only maintainability errors
@@ -52,7 +54,7 @@ module.exports = function (grunt) {
       all: {
         options: {
           reporter: "spec",
-          verbose: false,
+          verbose: true,
           colors: true
         },
         src: [ "test/*.js" ]
