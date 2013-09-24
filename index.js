@@ -8,7 +8,7 @@ function Geoservices (options) {
   this.options = options;
 
   this.geocode = geocode.geocode;
-  this.geoenrichment = geoenrichment.enrich;
+  this.geoenrichment = geoenrichment.Enrich;
   this.featureservice = featureservice.featureservice;
   this.authenticate   = authentication.authenticate;
   this.requestHandler = request;
