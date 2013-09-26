@@ -1,10 +1,10 @@
-function Geoservices (options) {
+function Geoservices(options) {
   this.options = options;
 
   this.geocode = geocode;
-  this.geoenrichment = geoenrichment;
+  this.GeoEnrichmentService = GeoEnrichmentService;
   this.FeatureService = FeatureService;
-  this.authenticate   = authenticate;
+  this.authenticate = authenticate;
   this.requestHandler = { get: get, post: post };
 
   var self = this;
@@ -18,17 +18,19 @@ function Geoservices (options) {
     return batch;
   };
 
-    this.geoenrichment.Enrich = function (optionalToken) {
-      optionalToken = optionalToken || self.token;
 
-      var enrich = new geoenrichment.Enrich(optionalToken);
-      enrich.requestHandler = request;
+  this.GeoEnrichmentService = function (optionalToken) {
+    optionalToken = optionalToken || self.token;
 
-      return enrich;
-    };
+    var geoEnrichService = new geoenrichment.GeoEnrichmentService(optionalToken);
+    //geoEnrichService.requestHandler = request;
+
+    return geoEnrichService;
+  };
+
+  exports.Geoservices = Geoservices;
+
+  return exports;
 }
-
-exports.Geoservices = Geoservices;
-
-return exports;
-}));
+))
+;

@@ -1,1 +1,1 @@
-exports.Enrich = Enrich;
+exports.GeoEnrichmentService = GeoEnrichmentService;

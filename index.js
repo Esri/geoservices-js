@@ -1,16 +1,15 @@
-var geocode        = require('./lib/geocode'),
-    geoenrichment  = require('./lib/geoenrichment'),
-    featureservice = require('./lib/featureservice'),
-    authentication = require('./lib/authentication'),
-    request        = require('./lib/request');
+var geocode = require('./lib/geocode'),
+  geoenrichment = require('./lib/geoenrichment'),
+  featureservice = require('./lib/featureservice'),
+  authentication = require('./lib/authentication'),
+  request = require('./lib/request');
 
-function Geoservices (options) {
+function Geoservices(options) {
   this.options = options;
 
   this.geocode = geocode.geocode;
-  this.geoenrichment = geoenrichment.Enrich;
-  this.featureservice = featureservice.featureservice;
-  this.authenticate   = authentication.authenticate;
+  this.FeatureService = featureservice.FeatureService;
+  this.authenticate = authentication.authenticate;
   this.requestHandler = request;
 
   var self = this;
@@ -24,14 +23,14 @@ function Geoservices (options) {
     return batch;
   };
 
-    this.geoenrichment.Enrich = function (optionalToken) {
-      optionalToken = optionalToken || self.token;
+  this.GeoEnrichmentService = function (optionalToken) {
+    optionalToken = optionalToken || self.token;
 
-      var enrich = new geoenrichment.Enrich(optionalToken);
-        enrich.requestHandler = request;
+    var geoEnrichService = new geoenrichment.GeoEnrichmentService(optionalToken);
+    //geoEnrichService.requestHandler = request;
 
-      return enrich;
-    };
+    return geoEnrichService;
+  };
 }
 
 module.exports = exports = Geoservices;
