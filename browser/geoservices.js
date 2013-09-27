@@ -449,7 +449,6 @@ GeoEnrichmentService.prototype.geographyQuery = function (parameters, callback) 
   this.issueRequest('StandardGeographyQuery/execute', parameters, callback, 'get');
 };
 
-
 function get (url, callback) {
   var httpRequest = new XMLHttpRequest();
 
@@ -534,10 +533,8 @@ function Geoservices(options) {
 
     return geoEnrichService;
   };
-
+}
   exports.Geoservices = Geoservices;
 
   return exports;
-}
-))
-;
+}));

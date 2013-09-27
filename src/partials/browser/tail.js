@@ -27,10 +27,8 @@ function Geoservices(options) {
 
     return geoEnrichService;
   };
-
+}
   exports.Geoservices = Geoservices;
 
   return exports;
-}
-))
-;
+}));
