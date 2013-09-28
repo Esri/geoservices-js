@@ -27,7 +27,6 @@ function Geoservices(options) {
     optionalToken = optionalToken || self.token;
 
     var geoEnrichService = new geoenrichment.GeoEnrichmentService(optionalToken);
-    //geoEnrichService.requestHandler = request;
 
     return geoEnrichService;
   };

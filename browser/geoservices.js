@@ -508,7 +508,6 @@ function Geoservices(options) {
   this.options = options;
 
   this.geocode = geocode;
-  this.GeoEnrichmentService = GeoEnrichmentService;
   this.FeatureService = FeatureService;
   this.authenticate = authenticate;
   this.requestHandler = { get: get, post: post };
@@ -528,8 +527,7 @@ function Geoservices(options) {
   this.GeoEnrichmentService = function (optionalToken) {
     optionalToken = optionalToken || self.token;
 
-    var geoEnrichService = new geoenrichment.GeoEnrichmentService(optionalToken);
-    //geoEnrichService.requestHandler = request;
+    var geoEnrichService = new GeoEnrichmentService(optionalToken);
 
     return geoEnrichService;
   };
