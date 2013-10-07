@@ -7,7 +7,6 @@ function GeoEnrichmentService(token, options) {
 
 function baseUrl(options) {
   var url = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver';
-  //var url = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/MapServer/exts/BAServer'
   if (options && options.geoEnrichUrl) url = options.geoEnrichUrl;
   return url;
 }
