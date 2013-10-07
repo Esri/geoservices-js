@@ -7,6 +7,7 @@ function GeoEnrichmentService(token, options) {
 
 function baseUrl(options) {
   var url = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/geoenrichmentserver';
+  //var url = 'http://geoenrich.arcgis.com/arcgis/rest/services/World/MapServer/exts/BAServer'
   if (options && options.geoEnrichUrl) url = options.geoEnrichUrl;
   return url;
 }
@@ -77,6 +78,16 @@ GeoEnrichmentService.prototype.issueRequest = function (endPoint, parameters, cb
 GeoEnrichmentService.prototype.enrich = function (parameters, callback) {
   this.issueRequest('GeoEnrichment/enrich', parameters, callback, 'post');
 };
+
+// issues a Reports request on the geoenrichment service
+GeoEnrichmentService.prototype.reports = function (parameters, callback) {
+  var endpoint = 'GeoEnrichment/Reports';
+  if (parameters && parameters.country){
+    endpoint += ('/' + parameters.country);
+    delete parameters.country;
+  }
+  this.issueRequest(endpoint, parameters, callback, 'get');
+ };
 
 // issues a createReport request on the geoenrichment service
 //@TODO: needs a binary response handler
