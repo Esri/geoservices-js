@@ -1,4 +1,6 @@
-# Geocoding
+## Getting started
+
+## Simple geocoding
 
 By default, geocoding uses simple single input field geocoding:
 
@@ -10,17 +12,7 @@ By default, geocoding uses simple single input field geocoding:
       }
     });
 
-## Simple Geocoding
-
-Simple geocoding is the same as the default `geocode` method:
-
-    client.geocode.simple({ text: "920 SW 3rd Ave, Portland, OR 97201" }, function (err, result) {
-      if (err) {
-        console.error("ERROR: " + err);
-      } else {
-        console.log("Found it at " + result.locations[0].feature.geometry.y + ", " + result.locations[0].feature.geometry.x);
-      }
-    });
+`client.geocode` is a shortcut for calling `client.geocode.simple`.
 
 ## Reverse Geocoding
 
