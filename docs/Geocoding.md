@@ -43,17 +43,17 @@ By default, geocoding uses simple single input field geocoding:
 Batch geocoding requires authentication.
 
     var client = new Geoservices();
-    
+
     client.authenticate('username', 'password', { /* optional options */ }, callback);
 
 Once you are authenticated, you can use batch geocoding.
 
     var batch = new client.geocode.Batch();
-    
+
     // add addresses to geocode
     batch.geocode("123 Fake Street");
     batch.geocode("456 Other Street");
-    
+
     // run the batch
     batch.run(function (err, results) {
       console.dir(results);
