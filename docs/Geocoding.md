@@ -1,4 +1,18 @@
-## Getting started
+# Geocoding
+
+## Creating the geocoding client
+
+### Browser
+
+    <script src="browser/geoservices.js"></script>
+    <script>
+      var client = new Geoservices();
+    </script>
+
+### Node.js
+
+    var Geoservices = require('geoservices');
+    var client = new Geoservices();
 
 ## Simple geocoding
 
