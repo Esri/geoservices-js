@@ -6,7 +6,7 @@ By default, geocoding uses simple single input field geocoding:
       if (err) {
         console.error("ERROR: " + err);
       } else {
-        console.log("Found it at " + result.locations[0].feature.geometry.y + ", " result.locations[0].feature.geometry.x);
+        console.log("Found it at " + result.locations[0].feature.geometry.y + ", " + result.locations[0].feature.geometry.x);
       }
     });
 
@@ -18,7 +18,7 @@ Simple geocoding is the same as the default `geocode` method:
       if (err) {
         console.error("ERROR: " + err);
       } else {
-        console.log("Found it at " + result.locations[0].feature.geometry.y + ", " result.locations[0].feature.geometry.x);
+        console.log("Found it at " + result.locations[0].feature.geometry.y + ", " + result.locations[0].feature.geometry.x);
       }
     });
 
@@ -38,7 +38,7 @@ Batch geocoding requires authentication.
 
     var client = new Geoservices();
     
-    client.authentication.authenticate('username', 'password', { /* optional options */ }, callback);
+    client.authenticate('username', 'password', { /* optional options */ }, callback);
 
 Once you are authenticated, you can use batch geocoding.
 
