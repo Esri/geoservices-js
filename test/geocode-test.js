@@ -1,13 +1,8 @@
 var vows   = require('vows');
 var assert = require('assert');
 
-var request = require('../lib/request');
 var geocode = require('../lib/geocode');
 
-// stub in requestHandler
-geocode.requestHandler = request;
-geocode.geocode.requestHandler = request;
-geocode.geocode.reverse.requestHandler = request;
 
 vows.describe('Geocode').addBatch({
   'When requesting a valid geocode': {
@@ -100,26 +95,6 @@ vows.describe('Geocode').addBatch({
       'an error is returned': function (err, data) {
         assert.equal(data, "Valid authentication token is required");
       }
-    }
-  },
-  'When a batch geocode request is made': {
-    topic: function () {
-      var batch = new geocode.Batch({ token: "abc", expires: (+new Date()) + 10000 });
-
-      var ret = { spatialReference: { wkid: 4326, latestWkid: 4326 }, locations: [ { address: '920 SW 3rd Ave, Portland, OR, 97204' } ] };
-
-      batch.requestHandler = {
-        post: function (url, data, callback) {
-          callback(null, ret);
-        }
-      };
-
-      batch.geocode('123 Fake Street');
-
-      batch.run(this.callback);
-    },
-    'a result is parsed and returned': function (err, data) {
-      assert.equal(data.locations.length, 1);
     }
   }
 }).export(module);
