@@ -1,7 +1,6 @@
 var geocode        = require('./lib/geocode'),
     featureservice = require('./lib/featureservice'),
-    authentication = require('./lib/authentication'),
-    request        = require('./lib/request');
+    authentication = require('./lib/authentication');
 
 function Geoservices (options) {
   this.options = options;
@@ -9,7 +8,6 @@ function Geoservices (options) {
   this.geocode = geocode.geocode;
   this.featureservice = featureservice.FeatureService;
   this.authenticate   = authentication.authenticate;
-  this.requestHandler = request;
 
   var self = this;
 
@@ -17,7 +15,6 @@ function Geoservices (options) {
     optionalToken = optionalToken || self.token;
 
     var batch = new geocode.Batch(optionalToken);
-    batch.requestHandler = request;
 
     return batch;
   };
