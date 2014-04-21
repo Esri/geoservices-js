@@ -38,5 +38,3 @@ Esri welcomes contributions from anyone and everyone. Please see our [guidelines
 
 This is an open library for communicating with any service that implements the Geoservices specification.  The default endpoint for Geocoding is ArcGIS Online.  Please see [Terms of Use](http://resources.arcgis.com/en/help/arcgis-rest-api/#/ArcGIS_Online_services_licensing/02r3000001mv000000/) for licensing and usage details.
 
-[](Esri Tags: GeoServices Node.js Node)
-[](Esri Language: JavaScript)

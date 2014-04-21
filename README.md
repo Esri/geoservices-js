@@ -1,6 +1,6 @@
 # Geoservices-js
 
-Javascript bindings for Geoservices.
+Node.js bindings for Geoservices.
  
 This module exposes both authenticated and non-authenticated aspects of Geoservices such as [ArcGIS Online](http://www.arcgis.com/).
 
@@ -17,14 +17,6 @@ This module exposes both authenticated and non-authenticated aspects of Geoservi
 
 ## Usage
 
-### Browser
-
-    <script src="browser/geoservices.js"></script>
-    <script>
-      var client = new Geoservices();
-    </script>
-
-### Node.js
 
 #### Installing
 
@@ -66,5 +58,5 @@ Esri welcomes contributions from anyone and everyone. Please see our [guidelines
 This is an open library for communicating with any service that implements the Geoservices specification.  The default endpoint for Geocoding is ArcGIS Online.  Please see [Terms of Use](http://resources.arcgis.com/en/help/arcgis-rest-api/#/ArcGIS_Online_services_licensing/02r3000001mv000000/) for licensing and usage details.
 
 
-[](Esri Tags: Geoservices Node.js Browser)
+[](Esri Tags: GeoServices Node.js Node)
 [](Esri Language: JavaScript)
