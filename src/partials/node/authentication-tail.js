@@ -1,1 +1,0 @@
-exports.authenticate = authenticate;
