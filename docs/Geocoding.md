@@ -2,15 +2,6 @@
 
 ## Creating the geocoding client
 
-### Browser
-
-    <script src="browser/geoservices.js"></script>
-    <script>
-      var client = new Geoservices();
-    </script>
-
-### Node.js
-
 ```javascript
     var Geoservices = require('geoservices');
     var client = new Geoservices();
@@ -31,7 +22,7 @@ By default, geocoding uses simple single input field geocoding:
 ```
 
 `client.geocode` is a shortcut for calling `client.geocode.simple`.
-
+
 ## Reverse Geocoding
 
 ```javascript

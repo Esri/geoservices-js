@@ -1,6 +1,5 @@
 var vows   = require('vows');
 var assert = require('assert');
-var request = require('../lib/request');
 
 var featureservice = require('../lib/featureservice');
 
@@ -11,8 +10,6 @@ var params = {
   layer: 3
 };
 
-// stub in requestHandler
-featureservice.requestHandler = request;
 
 vows.describe('FeatureService').addBatch({
   'When requesting a featureservice by catalog/type/service': {
