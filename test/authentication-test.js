@@ -51,5 +51,19 @@ vows.describe('Authentication').addBatch({
       assert.equal(err, null);
       assert.equal(data.error.code, 400);
     }
-  }
+  },
+  'When invalid JSON is returned': {
+      topic: function () {
+        // mock request tu return bad JSON
+        var requestHandler = {
+          post: function (url, data, callback) {
+            callback(null, null, 'NOT VALID JSON');
+          }
+        };
+        authentication.authenticate('foo', 'bar', { requestHandler: requestHandler }, this.callback);
+      },
+      'it should return an error': function (err, data) {
+        assert.equal(err, 'Error parsing JSON in authentication response: SyntaxError: Unexpected token N');
+      }
+    }
 }).export(module);
