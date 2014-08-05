@@ -14,7 +14,29 @@ var writeParams = {
   url: 'http://services.arcgis.com/OfH668nDRN7tbJh0/arcgis/rest/services/TDD/FeatureServer/0'
 }
 
-var writtenRecords = [];
+var writtenRecords = [],
+    templateRecord = {
+      geometry: { 
+        x: -12245143.987259885,
+        y: 4865942.279503077,
+        spatialReference: { wkid: 102100 } 
+      },
+      attributes: {
+        Name: 'Sample JSON Record',
+        Description: '',
+        ShortIntNum: 64,
+        LongIntNum: 1234567890,
+        FloatNum: 123456.098765,
+        SampleDateTime: new Date()
+      }
+    },
+    updateTemplateRecord = {
+      attributes: {
+        Name: 'Sample JSON Record',
+        Description: ''
+      }
+    },
+    defaultDescription = 'This is a sample record sent as ';
 
 
 vows.describe('FeatureService').addBatch({
@@ -89,29 +111,13 @@ vows.describe('FeatureService').addBatch({
       // "FloatNum"
       // "SampleDateTime"
 
-      var newRecord = {
-        geometry: { 
-          x: -12245143.987259885,
-          y: 4865942.279503077,
-          spatialReference: { wkid: 102100 } 
-        },
-        attributes: {
-          Name: 'Sample JSON Record',
-          Description: 'This is a sample record sent as a JSON object!',
-          ShortIntNum: 64,
-          LongIntNum: 1234567890,
-          FloatNum: 123456.098765,
-          SampleDateTime: new Date()
-        }
-      },
-        queryParams = {
-        features: [newRecord]
-      };
+      var newRecord = templateRecord;
+      newRecord.attributes.Description = defaultDescription + 'a JSON object!';
+      var addParams = { features: [newRecord] };
 
       var self = this;
-
       var fs = new featureservice.FeatureService( writeParams , function(err, data){
-        fs.add(queryParams, self.callback);
+        fs.add(addParams, self.callback);
       });
     },
     'the result should contain a single success record': function( err, data ){
@@ -132,29 +138,13 @@ vows.describe('FeatureService').addBatch({
       // "FloatNum"
       // "SampleDateTime"
 
-      var newRecord = {
-        geometry: { 
-          x: -12245143.987259885,
-          y: 4865942.279503077,
-          spatialReference: { wkid: 102100 } 
-        },
-        attributes: {
-          Name: 'Sample String Record',
-          Description: 'This is a sample record sent as a string!',
-          ShortIntNum: 64,
-          LongIntNum: 1234567890,
-          FloatNum: 123456.098765,
-          SampleDateTime: new Date()
-        }
-      },
-        queryParams = {
-        features: JSON.stringify([newRecord])
-      };
+      var newRecord = templateRecord;
+      newRecord.attributes.Description = defaultDescription + 'stringified JSON!'
+      var addParams = { features: JSON.stringify([newRecord]) };
 
       var self = this;
-
       var fs = new featureservice.FeatureService( writeParams , function(err, data){
-        fs.add(queryParams, self.callback);
+        fs.add(addParams, self.callback);
       });
     },
     'the result should contain a single success record': function( err, data ){
@@ -166,6 +156,49 @@ vows.describe('FeatureService').addBatch({
       writtenRecords.push(data.addResults[0].objectId);
     }
   }}).addBatch({
+    'When updating records with a JSON object': {
+      topic: function() {
+        var updateRecord = updateTemplateRecord;
+        updateRecord.attributes.Description = 'Record UPDATED with a JSON object!';
+        updateRecord.attributes["OBJECTID"] = writtenRecords[0];
+        updateRecord.attributes.SampleDateTime = new Date();
+        var updateParams = { features: [updateRecord] };
+
+        var self = this;
+        var fs = new featureservice.FeatureService( writeParams , function(err, data){
+          fs.update(updateParams, self.callback);
+        });
+      },
+      'the result should contain a single success record': function( err, data ){
+        assert.equal(err, null);
+        assert.isNotNull(data);
+        assert.include(data, 'updateResults');
+        assert.lengthOf(data.updateResults,1);
+        assert.isTrue(data.updateResults[0].success);
+      }
+    },
+    'When updating records with stringified JSON': {
+      topic: function() {
+        var updateRecord = updateTemplateRecord;
+        updateRecord.attributes.Description = 'Record UPDATED with a JSON object!';
+        updateRecord.attributes["OBJECTID"] = writtenRecords[1];
+        updateRecord.attributes.SampleDateTime = new Date();
+        var updateParams = { features: JSON.stringify([updateRecord]) };
+
+        var self = this;
+        var fs = new featureservice.FeatureService( writeParams , function(err, data){
+          fs.update(updateParams, self.callback);
+        });
+      },
+      'the result should contain a single success record': function( err, data ){
+        assert.equal(err, null);
+        assert.isNotNull(data);
+        assert.include(data, 'updateResults');
+        assert.lengthOf(data.updateResults,1);
+        assert.isTrue(data.updateResults[0].success);
+      }
+    }
+  }).addBatch({
   'When deleting records': {
     topic: function() {
       var self = this;
