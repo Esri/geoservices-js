@@ -10,6 +10,12 @@ var params = {
   layer: 3
 };
 
+var writeParams = {
+  url: 'http://services.arcgis.com/OfH668nDRN7tbJh0/arcgis/rest/services/TDD/FeatureServer/0'
+}
+
+var writtenRecords = [];
+
 
 vows.describe('FeatureService').addBatch({
   'When requesting a featureservice by catalog/type/service': {
@@ -72,6 +78,113 @@ vows.describe('FeatureService').addBatch({
     'the result should contain features': function( err, data ){
       assert.equal( err, null );
       assert.notEqual( data.features.length, 0 );
+    }
+  },
+  'When adding a JSON point object': {
+    topic: function(){
+      // "Name"
+      // "Description"
+      // "ShortIntNum"
+      // "LongIntNum"
+      // "FloatNum"
+      // "SampleDateTime"
+
+      var newRecord = {
+        geometry: { 
+          x: -12245143.987259885,
+          y: 4865942.279503077,
+          spatialReference: { wkid: 102100 } 
+        },
+        attributes: {
+          Name: 'Sample JSON Record',
+          Description: 'This is a sample record sent as a JSON object!',
+          ShortIntNum: 64,
+          LongIntNum: 1234567890,
+          FloatNum: 123456.098765,
+          SampleDateTime: new Date()
+        }
+      },
+        queryParams = {
+        features: [newRecord]
+      };
+
+      var self = this;
+
+      var fs = new featureservice.FeatureService( writeParams , function(err, data){
+        fs.add(queryParams, self.callback);
+      });
+    },
+    'the result should contain a single success record': function( err, data ){
+      assert.equal(err, null);
+      assert.isNotNull(data);
+      assert.include(data, 'addResults');
+      assert.lengthOf(data.addResults,1);
+      assert.isTrue(data.addResults[0].success);
+      writtenRecords.push(data.addResults[0].objectId);
+    }
+  },
+  'When adding a stringified JSON point object': {
+    topic: function(){
+      // "Name"
+      // "Description"
+      // "ShortIntNum"
+      // "LongIntNum"
+      // "FloatNum"
+      // "SampleDateTime"
+
+      var newRecord = {
+        geometry: { 
+          x: -12245143.987259885,
+          y: 4865942.279503077,
+          spatialReference: { wkid: 102100 } 
+        },
+        attributes: {
+          Name: 'Sample String Record',
+          Description: 'This is a sample record sent as a string!',
+          ShortIntNum: 64,
+          LongIntNum: 1234567890,
+          FloatNum: 123456.098765,
+          SampleDateTime: new Date()
+        }
+      },
+        queryParams = {
+        features: JSON.stringify([newRecord])
+      };
+
+      var self = this;
+
+      var fs = new featureservice.FeatureService( writeParams , function(err, data){
+        fs.add(queryParams, self.callback);
+      });
+    },
+    'the result should contain a single success record': function( err, data ){
+      assert.equal(err, null);
+      assert.isNotNull(data);
+      assert.include(data, 'addResults');
+      assert.lengthOf(data.addResults,1);
+      assert.isTrue(data.addResults[0].success);
+      writtenRecords.push(data.addResults[0].objectId);
+    }
+  }}).addBatch({
+  'When deleting records': {
+    topic: function() {
+      var self = this;
+      var fs = new featureservice.FeatureService( writeParams , function(err, data){
+        var payload = {objectIds:writtenRecords.join()};
+        fs.remove(payload, self.callback);
+      });
+    },
+    'the result should be a list of IDs': function(err, data) {
+      assert.isNotNull(data);
+      assert.include(data, 'deleteResults');
+    },
+    'the IDs returned should match the IDs sent and should each return success': function(err, data) {
+      assert.lengthOf(data.deleteResults,writtenRecords.length);
+      for (var i = 0; i < writtenRecords.length; i++) {
+        assert.equal(data.deleteResults[i].objectId, writtenRecords[i]);
+        assert.isTrue(data.deleteResults[i].success);
+      }
+      writtenRecords = [];
     }
   }
 }).export(module);
