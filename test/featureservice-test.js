@@ -10,50 +10,6 @@ var params = {
   layer: 3
 };
 
-var writeParams = {
-  url: 'http://services.arcgis.com/OfH668nDRN7tbJh0/arcgis/rest/services/TDD/FeatureServer/0'
-}
-
-var writtenRecords = [],
-    templateRecord = {
-      geometry: { 
-        x: -12245143.987259885,
-        y: 4865942.279503077,
-        spatialReference: { wkid: 102100 } 
-      },
-      attributes: {
-        Name: 'Sample JSON Record',
-        Description: '',
-        ShortIntNum: 64,
-        LongIntNum: 1234567890,
-        FloatNum: 123456.098765,
-        SampleDateTime: new Date()
-      }
-    },
-    updateTemplateRecord = {
-      attributes: {
-        Name: 'Sample JSON Record',
-        Description: ''
-      }
-    },
-    defaultDescription = 'This is a sample record sent as ',
-    testExtent = {
-      xmin : -20037507.842788249, 
-      ymin : -30240971.458386172, 
-      xmax : 20037507.842788249, 
-      ymax : 30240971.458386205
-    },
-    xRndMax = testExtent.xmax - testExtent.xmin,
-    yRndMax = testExtent.ymax - testExtent.ymin;
-
-function getRandomPoint() {
-  var pt = { 
-    x: (Math.random() * xRndMax) + testExtent.xmin,
-    y: (Math.random() * yRndMax) + testExtent.ymin,
-    spatialReference: { wkid: 102100 } 
-  };
-  return pt;
-}
 
 vows.describe('FeatureService').addBatch({
   'When requesting a featureservice by catalog/type/service': {
@@ -119,6 +75,53 @@ vows.describe('FeatureService').addBatch({
     }
   }
 }).export(module);
+
+
+
+var writeParams = {
+  url: 'http://services.arcgis.com/OfH668nDRN7tbJh0/arcgis/rest/services/TDD/FeatureServer/0'
+}
+
+var templateRecord = {
+      geometry: { 
+        x: -12245143.987259885,
+        y: 4865942.279503077,
+        spatialReference: { wkid: 102100 } 
+      },
+      attributes: {
+        Name: 'Sample JSON Record',
+        Description: '',
+        ShortIntNum: 64,
+        LongIntNum: 1234567890,
+        FloatNum: 123456.098765,
+        SampleDateTime: new Date()
+      }
+    },
+    updateTemplateRecord = {
+      attributes: {
+        Name: 'Sample JSON Record',
+        Description: ''
+      }
+    },
+    defaultDescription = 'This is a sample record sent as ',
+    writtenRecords = [],
+    testExtent = {
+      xmin : -20037507.842788249, 
+      ymin : -30240971.458386172, 
+      xmax : 20037507.842788249, 
+      ymax : 30240971.458386205
+    },
+    xRndMax = testExtent.xmax - testExtent.xmin,
+    yRndMax = testExtent.ymax - testExtent.ymin;
+
+function getRandomPoint() {
+  var pt = { 
+    x: (Math.random() * xRndMax) + testExtent.xmin,
+    y: (Math.random() * yRndMax) + testExtent.ymin,
+    spatialReference: { wkid: 102100 } 
+  };
+  return pt;
+}
 
 vows.describe('FeatureService Editing').addBatch({
   'When adding a JSON point object': {
