@@ -12,8 +12,8 @@ vows.describe('Geocode').addBatch({
     'It should return the correct latitude and longitude': function (err, data) {
       assert.equal(err, null);
       assert.equal(data.locations.length, 1);
-      assert.equal(data.locations[0].feature.geometry.x.toPrecision(7), (-122.67633658436517).toPrecision(7));
-      assert.equal(data.locations[0].feature.geometry.y.toPrecision(7), (45.5167324388521).toPrecision(7));
+      assert.equal(data.locations[0].feature.geometry.x.toPrecision(5), (-122.67633658436517).toPrecision(5));
+      assert.equal(data.locations[0].feature.geometry.y.toPrecision(5), (45.5167324388521).toPrecision(5));
     }
   },
   'When running using the "simple" method': {
@@ -23,8 +23,8 @@ vows.describe('Geocode').addBatch({
     'It should return the correct latitude and longitude': function (err, data) {
       assert.equal(err, null);
       assert.equal(data.locations.length, 1);
-      assert.equal(data.locations[0].feature.geometry.x.toPrecision(7), (-122.67633658436517).toPrecision(7));
-      assert.equal(data.locations[0].feature.geometry.y.toPrecision(7), (45.5167324388521).toPrecision(7));
+      assert.equal(data.locations[0].feature.geometry.x.toPrecision(5), (-122.67633658436517).toPrecision(5));
+      assert.equal(data.locations[0].feature.geometry.y.toPrecision(5), (45.5167324388521).toPrecision(5));
     }
   },
   'When using reverse geocoding': {
@@ -36,6 +36,15 @@ vows.describe('Geocode').addBatch({
       assert.equal(data.address.Address, "918 SW 3rd Ave");
     }
   },
+  'When performing an invalid reverse geocode': {
+    topic: function () {
+      geocode.geocode.reverse({}, this.callback);
+    },
+    'we should parse the response manually for the error within the 200 status code message': function (err, data) {
+      assert.equal(data, null);
+      assert.equal(err.message, "Unable to complete operation.");
+    }
+  },
   'When requesting all address matches using text': {
     topic: function () {
       geocode.geocode.addresses({ text: "920 3rd Ave, Portland, OR 97204" }, this.callback);
@@ -44,8 +53,8 @@ vows.describe('Geocode').addBatch({
       assert.equal(err, null);
       assert.isTrue(data.candidates.length > 1);
       assert.isTrue(data.candidates[0].score > 90);
-      assert.equal(data.candidates[0].location.x.toPrecision(7), (-122.67633658436517).toPrecision(7));
-      assert.equal(data.candidates[0].location.y.toPrecision(7), (45.5167324388521).toPrecision(7));
+      assert.equal(data.candidates[0].location.x.toPrecision(5), (-122.67633658436517).toPrecision(5));
+      assert.equal(data.candidates[0].location.y.toPrecision(5), (45.5167324388521).toPrecision(5));
       var lastMatch = data.candidates.pop();
     }
   },
@@ -62,8 +71,8 @@ vows.describe('Geocode').addBatch({
       assert.equal(err, null);
       assert.isTrue(data.candidates.length > 1);
       assert.isTrue(data.candidates[0].score > 90);
-      assert.equal(data.candidates[0].location.x.toPrecision(7), (-122.67633658436517).toPrecision(7));
-      assert.equal(data.candidates[0].location.y.toPrecision(7), (45.5167324388521).toPrecision(7));
+      assert.equal(data.candidates[0].location.x.toPrecision(5), (-122.67633658436517).toPrecision(5));
+      assert.equal(data.candidates[0].location.y.toPrecision(5), (45.5167324388521).toPrecision(5));
       var lastMatch = data.candidates.pop();
     }
   },
@@ -96,5 +105,30 @@ vows.describe('Geocode').addBatch({
         assert.equal(data, "Valid authentication token is required");
       }
     }
+  },
+  'When making an invalid simple request': {
+    topic: function () {
+      geocode.options = {geocoderUrl: "http://geocode.arcgis.com/arcgis/rest/services/foo"};
+      geocode.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback);
+      geocode.options = null;
+    },
+    'we should parse the response manually for the error within the 200 status code message': function (err, data) {
+      assert.equal(data, null);
+      assert.equal(err.message, "Invalid URL");
+
+    }
+  },
+  'When making a really invalid simple request': {
+    topic: function () {
+      geocode.options = {geocoderUrl: "http://foo.arcgis.com/arcgis/rest/services/GeocodeServer"};
+      geocode.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback);
+      geocode.options = null;
+    },
+    'we should return the genuine error response from the server': function (err, data) {
+      assert.equal(data, null);
+      assert.equal(err.code, "ENOTFOUND");
+
+    }
   }
+
 }).export(module);

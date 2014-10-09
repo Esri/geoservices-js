@@ -80,13 +80,13 @@ vows.describe('FeatureService').addBatch({
 
 var writeParams = {
   url: 'http://services.arcgis.com/OfH668nDRN7tbJh0/arcgis/rest/services/TDD/FeatureServer/0'
-}
+};
 
 var templateRecord = {
-      geometry: { 
+      geometry: {
         x: -12245143.987259885,
         y: 4865942.279503077,
-        spatialReference: { wkid: 102100 } 
+        spatialReference: { wkid: 102100 }
       },
       attributes: {
         Name: 'Sample JSON Record',
@@ -106,19 +106,19 @@ var templateRecord = {
     defaultDescription = 'This is a sample record sent as ',
     writtenRecords = [],
     testExtent = {
-      xmin : -20037507.842788249, 
-      ymin : -30240971.458386172, 
-      xmax : 20037507.842788249, 
+      xmin : -20037507.842788249,
+      ymin : -30240971.458386172,
+      xmax : 20037507.842788249,
       ymax : 30240971.458386205
     },
     xRndMax = testExtent.xmax - testExtent.xmin,
     yRndMax = testExtent.ymax - testExtent.ymin;
 
 function getRandomPoint() {
-  var pt = { 
+  var pt = {
     x: (Math.random() * xRndMax) + testExtent.xmin,
     y: (Math.random() * yRndMax) + testExtent.ymin,
-    spatialReference: { wkid: 102100 } 
+    spatialReference: { wkid: 102100 }
   };
   return pt;
 }
@@ -155,7 +155,7 @@ vows.describe('FeatureService Editing').addBatch({
     topic: function(){
       var newRecord = templateRecord;
       newRecord.geometry = getRandomPoint();
-      newRecord.attributes.Description = defaultDescription + 'stringified JSON!'
+      newRecord.attributes.Description = defaultDescription + 'stringified JSON!';
       var addParams = { features: JSON.stringify([newRecord]) };
 
       var self = this;
@@ -195,7 +195,7 @@ vows.describe('FeatureService Editing').addBatch({
 
       updateRecord.geometry = getRandomPoint();
       updateRecord.attributes.Description = 'Record UPDATED with a JSON object in a batch edit';
-      updateRecord.attributes["OBJECTID"] = writtenRecords[0];
+      updateRecord.attributes.OBJECTID = writtenRecords[0];
       updateRecord.attributes.SampleDateTime = new Date();
       editParams.updates.push(updateRecord);
 
@@ -248,7 +248,7 @@ vows.describe('FeatureService Editing').addBatch({
 
       updateRecord.geometry = getRandomPoint();
       updateRecord.attributes.Description = 'Record UPDATED with a JSON object in a batch edit';
-      updateRecord.attributes["OBJECTID"] = writtenRecords[0];
+      updateRecord.attributes.OBJECTID = writtenRecords[0];
       updateRecord.attributes.SampleDateTime = new Date();
       editParams.updates.push(updateRecord);
 
@@ -294,7 +294,7 @@ vows.describe('FeatureService Editing').addBatch({
       var updateRecord = updateTemplateRecord;
       updateRecord.geometry = getRandomPoint();
       updateRecord.attributes.Description = 'Record UPDATED with a JSON object!';
-      updateRecord.attributes["OBJECTID"] = writtenRecords[0];
+      updateRecord.attributes.OBJECTID = writtenRecords[0];
       updateRecord.attributes.SampleDateTime = new Date();
       var updateParams = { features: [updateRecord] };
 
@@ -322,7 +322,7 @@ vows.describe('FeatureService Editing').addBatch({
       var updateRecord = updateTemplateRecord;
       updateRecord.geometry = getRandomPoint();
       updateRecord.attributes.Description = 'Record UPDATED with a JSON object!';
-      updateRecord.attributes["OBJECTID"] = writtenRecords[1];
+      updateRecord.attributes.OBJECTID = writtenRecords[1];
       updateRecord.attributes.SampleDateTime = new Date();
       var updateParams = { features: JSON.stringify([updateRecord]) };
 
