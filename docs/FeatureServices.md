@@ -6,7 +6,7 @@ Feature Services are the primary way of accessing vector features from Esri serv
 ## Feature Service Metadata via a url
 
     // make a request to a feature service
-    client.FeatureService({
+    client.featureservice({
         url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3'
       }, function ( err, result ) {
         if (err) {
@@ -33,7 +33,7 @@ Alternatively we can decompose the service url into params to provide more flexi
     };
 
     // make request to the service 
-    client.FeatureService( params , function (err, result) {
+    client.featureservice( params , function (err, result) {
       if (err) {
         console.error("ERROR: " + err);
       } else {
@@ -50,7 +50,7 @@ We can request actual features two ways: with parameters and without. If we dont
 
 Here we request the default feature service query for data 
 
-    var fs = client.FeatureService( params , function(err, data){
+    var fs = client.featureservice( params , function(err, data){
       fs.query({f: 'json'}, function( err, result ){
         if (err) {
           console.error("ERROR: " + err);
@@ -71,7 +71,7 @@ Feature Services are very deep and powerful. We can pass any supported parameter
       outSR: '4326'
     };
 
-    var fs = client.FeatureService( params , function(err, data){
+    var fs = client.featureservice( params , function(err, data){
       fs.query( query_params, function( err, result ){
         if (err) {
           console.error("ERROR: " + err);
