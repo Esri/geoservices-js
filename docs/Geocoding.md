@@ -16,7 +16,8 @@ By default, geocoding uses simple single input field geocoding:
       if (err) {
         console.error("ERROR: " + err);
       } else {
-        console.log("Found it at " + result.locations[0].feature.geometry.y + ", " + result.locations[0].feature.geometry.x);
+        console.log("Found it at " + result.locations[0].feature.geometry.y
+        + ", " + result.locations[0].feature.geometry.x);
       }
     });
 ```
@@ -26,24 +27,29 @@ By default, geocoding uses simple single input field geocoding:
 ## Reverse Geocoding
 
 ```javascript
-      client.geocode.reverse({ location: "-122.67633658436517,45.5167324388521" }, function (err, result) {
-      if (err) {
-        console.error("ERROR: " + err);
-      } else {
-        console.log("Found it at " + result.address.Address + ", " + result.address.City);
+    client.geocode.reverse({ location: "-122.67633658,45.51673243" },
+      function (err, result) {
+        if (err) {
+          console.error("ERROR: " + err);
+        } else {
+          console.log("Found it at " + result.address.Address + ", " + result.address.City);
+        }
       }
-    });
+    );
 ```
 
 ## Batch Geocoding
 
 Batch geocoding requires authentication.
 
-To authenticate, the `authenticate` method is called, and the function you want to be run
-with authentication is complete is passed in as a callback. This callback will be called
-with `err` and `results` as arguments.
+To retrieve a token, the `authenticate` method is called, and the function you want to be run when authentication is complete is passed in as a callback. This callback will be called with `err` and `results` as arguments.
 
 Within this callback, you should check for an error and then run your batch geocoding.
+
+### Note:
+When sizing batches it is recommended that you utilize the `SuggestedBatchSize` of the service that you are working with (ie: 150).  This will help you avoid having matches for addresses in your request in excess of `MaxBatchSize` truncated.
+
+See [this](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-geocode-addresses.htm) article for more information.
 
 Optional arguments include the following:
 
@@ -55,7 +61,7 @@ Optional arguments include the following:
     * Example: referer=http://myserver/mywebapp
  * **expiration**, the token expiration time in minutes. The default is 60 minutes.   The maximum value of the expiration time is controlled by the server. Requests for tokens larger than this time will return a token for the maximum allowed expiration time. Applications are responsible for renewing expired tokens; expired tokens will be rejected by the server on subsequent requests that use the token.
     * Example: expiration=60 (1 hour)
- * **ip**, the IP address of the machine that will invoke the request to access secured resource. This parameter must be specified if the value of the client parameter is ip.  
+ * **ip**, the IP address of the machine that will invoke the request to access secured resource. This parameter must be specified if the value of the client parameter is ip.
     * Example: ip=\#\#\#.\#\#\#.\#\#\#.\#\#\#
 
 ```javascript
@@ -81,10 +87,9 @@ Optional arguments include the following:
 ```
 
 Given the above example, the `results` returned could be the following.  See
-the [official ArcGIS REST API docs on the output format](http://resources.arcgis.com/en/help/arcgis-rest-api/02r3/02r300000017000000.htm) for the full documentation
-of the fields returned.
+the official Geocoding Service [Documentation](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm) for more information about the fields returned.
 
-Note that the "location" results are returned in the same order the inputs were provided. 
+Note that the "location" results are returned in the same order the inputs were provided.
 
 ```json
     {
@@ -193,7 +198,6 @@ Note that the "location" results are returned in the same order the inputs were 
 
 ## Further Reference
 
-This geocoding client uses the ArcGIS REST API. Request options and Responses
-documented here are based on that API. For the most current and official documentation of the API
-see the [official ArcGIS REST API documentation](http://resources.arcgis.com/en/help/arcgis-rest-api/#/The_ArcGIS_REST_API/02r300000054000000/).
+This geocoding client uses the ArcGIS REST API. Request options and responses
+documented here are based on that API. For the most current and official information see the [World Geocoding Service](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm) documentation and the ArcGIS REST API documentation for custom ArcGIS Server [Geocoding Services](http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Geocode_Service/02r3000000q9000000/).
 
