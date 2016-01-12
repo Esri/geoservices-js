@@ -1,6 +1,6 @@
 # Feature Services
 
-Feature Services are the primary way of accessing vector features from Esri services, and are very deep in terms on functionality. Below are some examples of accessing information about a feature service (metadata), and some actually feature data. 
+Feature Services are the primary way of accessing vector features from Esri services, and are very deep in terms of functionality. Below are some examples of accessing information about a feature service (metadata), and some actually feature data. 
 
 
 ## Feature Service Metadata via a url
