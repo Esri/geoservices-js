@@ -1,7 +1,7 @@
 # Geoservices-js
 
 Node.js bindings for Geoservices.
- 
+
 This module exposes both authenticated and non-authenticated aspects of Geoservices such as [ArcGIS Online](http://www.arcgis.com/).
 
 ## Non-authenticated Services
@@ -48,8 +48,6 @@ Testing can also occur stand-alone:
 
 * [Feature Services](docs/FeatureServices.md) are the primary way of accessing vector features from Esri services, and are very deep in terms on functionality.
 * [Geocoding](docs/Geocoding.md) documents how to do simple geocoding, reverse geocoding and batch geocoding.
-
-For more information see the Geoservices Specification available at http://www.esri.com/library/whitepapers/pdfs/geoservices-rest-spec.pdf
 
 ## Contributing
 

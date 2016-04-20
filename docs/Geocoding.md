@@ -1,5 +1,8 @@
 # Geocoding
 
+> This geocoding client uses the ArcGIS REST API. Request options and responses
+documented here are based on that API. For the most current and official information see the [World Geocoding Service](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm) documentation and the ArcGIS REST API documentation for custom ArcGIS Server [Geocoding Services](http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Geocode_Service/02r3000000q9000000/).
+
 ## Creating the geocoding client
 
 ```javascript
@@ -195,9 +198,3 @@ Note that the "location" results are returned in the same order the inputs were 
         ]
     }
 ```
-
-## Further Reference
-
-This geocoding client uses the ArcGIS REST API. Request options and responses
-documented here are based on that API. For the most current and official information see the [World Geocoding Service](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm) documentation and the ArcGIS REST API documentation for custom ArcGIS Server [Geocoding Services](http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Geocode_Service/02r3000000q9000000/).
-
