@@ -12,9 +12,9 @@ var params = {
 
 
 vows.describe('FeatureService').addBatch({
-  'When requesting a featureservice by catalog/type/service': {
+  'When requesting a featureservice by catalog/service/type': {
     topic: function () {
-      featureservice.FeatureService( params , this.callback);
+      new featureservice.FeatureService( params , this.callback);
     },
     'It should return the correct service metadata': function (err, data) {
       assert.equal(err, null);
@@ -24,7 +24,7 @@ vows.describe('FeatureService').addBatch({
   },
   'When requesting a featureservice by url': {
     topic: function () {
-      featureservice.FeatureService({
+      new featureservice.FeatureService({
         url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3'
       } , this.callback);
     },

@@ -29,6 +29,6 @@
     "grunt-complexity": "~0.1.2"
   },
   "author": "",
-  "license": "Apache",
+  "license": "Apache-2.0",
   "readmeFilename": "README.md"
 }

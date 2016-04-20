@@ -1,5 +1,7 @@
 # Geoservices-js
 
+[![Build Status](https://travis-ci.org/Esri/geoservices-js.svg?branch=master)](https://travis-ci.org/Esri/geoservices-js)
+
 Node.js bindings for Geoservices.
 
 This module exposes both authenticated and non-authenticated aspects of Geoservices such as [ArcGIS Online](http://www.arcgis.com/).
