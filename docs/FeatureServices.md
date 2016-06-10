@@ -91,7 +91,7 @@ We can request features from a related layer.  At the very least the relationshi
     };
 
     var fs = client.featureservice( params , function(err, data){
-      fs.queryRelated( query_params, function( err, result ){
+      fs.queryRelatedRecords( query_params, function( err, result ){
         if (err) {
           console.error("ERROR: " + err);
         } else {
