@@ -50,6 +50,7 @@ Method | Arguments | Description
 `query(<query options>, <callback>)` | [`options`](http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Query_Feature_Service_Layer/02r3000000r1000000/) | Executes a query to filter using either SQL, a spatial clause or both simultaneously.  Returns an array of matching features.
 `count(<query options>, <callback>)` |  [`options`](http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Query_Feature_Service_Layer/02r3000000r1000000/) | Accepts the same argument, but this method returns only the count of features satisfying the filter.
 `ids(<query options>, <callback>)` | [`options`](http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Query_Feature_Service_Layer/02r3000000r1000000/) | Accepts the same argument.  This method returns an array of IDs corresponding to features that satisfy the filter.
+`queryRelatedRecords(<query options>, <callback>)` | [`options`](http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Query_Feature_Service_Layer/02r3000000r1000000/) | Allows for [querying related tables](http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#/Query_Related_Records/02r300000115000000/).  The only required query parameter is `relationshipId`.
 
 We can form spatial/sql queries for features very flexibly. If we don't send any params we are simply accepting the defaults provided by the service itself.
 
@@ -98,6 +99,25 @@ var fs = client.featureservice( params , function(err, data){
     }
   });
 
+});
+```
+
+
+We can also request features from a related layer.  At the very least, the relationshipId parameter *must* be specified.
+
+```js
+var query_params = {
+  relationshipId: 0
+};
+
+var fs = client.featureservice( params , function(err, data){
+  fs.queryRelatedRecords( query_params, function( err, result ){
+    if (err) {
+      console.error("ERROR: " + err);
+    } else {
+      console.log("Features: ", result );
+    }
+  });
 });
 ```
 
