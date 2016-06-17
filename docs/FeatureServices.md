@@ -82,4 +82,23 @@ Feature Services are very deep and powerful. We can pass any supported parameter
     });
 
 
+## Querying for related records 
+
+We can request features from a related layer.  At the very least the relationshipId parameter must be specified.
+    
+    var query_params = {
+      relationshipId: 0
+    };
+
+    var fs = client.featureservice( params , function(err, data){
+      fs.queryRelatedRecords( query_params, function( err, result ){
+        if (err) {
+          console.error("ERROR: " + err);
+        } else {
+          console.log("Features: ", result );
+        }
+      });
+    });
+
+
 
