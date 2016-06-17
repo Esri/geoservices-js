@@ -7,3 +7,5 @@ Icon
 /*.sublime-project
 *.sublime-workspace
 report.xml
+
+debug/*.js
