@@ -22,7 +22,7 @@ vows.describe('Authentication').addBatch({
   },
   'When authenticating with a valid account and expiration': {
     topic: function () {
-      // mock 
+      // mock
       var requestHandler = {
         post: function (url, data, callback) {
           callback(null, null, JSON.stringify({ token: 'abc123', expires: 1366662062704, ssl: false }));
@@ -38,7 +38,7 @@ vows.describe('Authentication').addBatch({
   },
   'When authenticating with an invalid account': {
     topic: function () {
-      // mock 
+      // mock
       var requestHandler = {
         post: function (url, data, callback) {
           callback(null, null, JSON.stringify({ error: { code: 400, message: 'Unable to generate token.', details: [ 'Invalid username or password.' ] } }));
@@ -63,7 +63,7 @@ vows.describe('Authentication').addBatch({
         authentication.authenticate('foo', 'bar', { requestHandler: requestHandler }, this.callback);
       },
       'it should return an error': function (err, data) {
-        assert.equal(err, 'Error parsing JSON in authentication response: SyntaxError: Unexpected token N');
+        assert.equal(err, 'Error parsing JSON in authentication response: SyntaxError: Unexpected token N in JSON at position 0');
       }
     }
 }).export(module);
