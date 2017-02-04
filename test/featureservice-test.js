@@ -4,7 +4,7 @@ var assert = require('assert');
 var featureservice = require('../lib/featureservice');
 
 var params = {
-  catalog: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services',
+  catalog: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services',
   service: 'Census',
   type: 'MapServer',
   layer: 3
@@ -22,10 +22,19 @@ vows.describe('FeatureService').addBatch({
       //assert.equal(data.layers[0].name, 'hospitals');
     }
   },
+  'When requesting a featureservice without the new constructor': {
+    topic: function () {
+      featureservice.FeatureService( params , this.callback);
+    },
+    'It should create the service and return the correct service metadata': function (err, data) {
+      assert.equal(err, null)
+      assert.notEqual(data, null)
+    }
+  },
   'When requesting a featureservice by url': {
     topic: function () {
       new featureservice.FeatureService({
-        url: 'http://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3'
+        url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer/3'
       } , this.callback);
     },
     'It should return the correct service metadata': function (err, data) {
@@ -79,7 +88,7 @@ vows.describe('FeatureService').addBatch({
 
 
 var writeParams = {
-  url: 'http://services.arcgis.com/OfH668nDRN7tbJh0/arcgis/rest/services/TDD/FeatureServer/0'
+  url: 'https://services.arcgis.com/OfH668nDRN7tbJh0/arcgis/rest/services/TDD/FeatureServer/0'
 };
 
 var templateRecord = {
