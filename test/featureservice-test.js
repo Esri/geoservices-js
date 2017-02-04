@@ -22,6 +22,15 @@ vows.describe('FeatureService').addBatch({
       //assert.equal(data.layers[0].name, 'hospitals');
     }
   },
+  'When requesting a featureservice without the new constructor': {
+    topic: function () {
+      featureservice.FeatureService( params , this.callback);
+    },
+    'It should create the service and return the correct service metadata': function (err, data) {
+      assert.equal(err, null)
+      assert.notEqual(data, null)
+    }
+  },
   'When requesting a featureservice by url': {
     topic: function () {
       new featureservice.FeatureService({
