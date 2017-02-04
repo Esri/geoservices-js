@@ -28,5 +28,5 @@
 * FeatureService calls now automatically detect JSON being passed in and no longer require coersion to `String`
 
 [Unreleased]: https://github.com/Esri/geoservices-js/compare/v1.1.1...HEAD
-[1.1.0]: https://github.com/Esri/geoservices-js/compare/v1.1.0...v1.1.1
+[1.1.1]: https://github.com/Esri/geoservices-js/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/Esri/geoservices-js/compare/v1.0.0...v1.1.0
