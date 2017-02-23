@@ -7,24 +7,28 @@ var geocode = require('../lib/geocode');
 vows.describe('Geocode').addBatch({
   'When requesting a valid geocode': {
     topic: function () {
-      geocode.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback);
+      geocode.geocode({ 
+        text: "920 SW 3rd Ave, Portland, OR 97204"
+      }, this.callback);
     },
     'It should return the correct latitude and longitude': function (err, data) {
       assert.equal(err, null);
-      assert.equal(data.locations.length, 1);
-      assert.equal(data.locations[0].feature.geometry.x.toPrecision(5), (-122.67633658436517).toPrecision(5));
-      assert.equal(data.locations[0].feature.geometry.y.toPrecision(5), (45.5167324388521).toPrecision(5));
+      assert.isTrue(data.candidates.length > 1);
+      assert.equal(data.candidates[0].location.x.toPrecision(5), (-122.67633658436517).toPrecision(5));
+      assert.equal(data.candidates[0].location.y.toPrecision(5), (45.5167324388521).toPrecision(5));
     }
   },
   'When running using the "simple" method': {
     topic: function () {
-      geocode.geocode.simple({ text: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback);
+      geocode.geocode.simple({ 
+        text: "920 SW 3rd Ave, Portland, OR 97204"
+      }, this.callback);
     },
     'It should return the correct latitude and longitude': function (err, data) {
       assert.equal(err, null);
-      assert.equal(data.locations.length, 1);
-      assert.equal(data.locations[0].feature.geometry.x.toPrecision(5), (-122.67633658436517).toPrecision(5));
-      assert.equal(data.locations[0].feature.geometry.y.toPrecision(5), (45.5167324388521).toPrecision(5));
+      assert.isTrue(data.candidates.length > 1);
+      assert.equal(data.candidates[0].location.x.toPrecision(5), (-122.67633658436517).toPrecision(5));
+      assert.equal(data.candidates[0].location.y.toPrecision(5), (45.5167324388521).toPrecision(5));
     }
   },
   'When using reverse geocoding': {
@@ -47,7 +51,7 @@ vows.describe('Geocode').addBatch({
   },
   'When requesting all address matches using text': {
     topic: function () {
-      geocode.geocode.addresses({ text: "920 3rd Ave, Portland, OR 97204" }, this.callback);
+      geocode.geocode({ text: "920 3rd Ave, Portland, OR 97204" }, this.callback);
     },
     'It should return a sorted list of likely geocode matches': function (err, data) {
       assert.equal(err, null);
@@ -60,7 +64,7 @@ vows.describe('Geocode').addBatch({
   },
   'When requesting all address matches using object': {
     topic: function () {
-      geocode.geocode.addresses({
+      geocode.geocode({
         Address: "920 3rd Ave",
         City: "Portland",
         Region: "OR",
