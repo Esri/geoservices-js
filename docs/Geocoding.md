@@ -12,21 +12,41 @@ documented here are based on that API. For the most current and official informa
 
 ## Simple geocoding
 
-By default, geocoding uses simple single input field geocoding:
+By default, geocoding makes simple single input field requests to the [World Geocoding Service](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm):
 
 ```javascript
-    client.geocode({ text: "920 SW 3rd Ave, Portland, OR 97201" }, function (err, result) {
+    client.geocode({ singleLine: "920 SW 3rd Ave, Portland, OR 97201" }, function (err, result) {
       if (err) {
         console.error("ERROR: " + err);
       } else {
-        console.log("Found it at " + result.locations[0].feature.geometry.y
-        + ", " + result.locations[0].feature.geometry.x);
+        console.log("Found it at " + result.candidates[0].location.y
+        + ", " + result.candidates[0].location.geometry.x);
       }
     });
 ```
 
 `client.geocode` is a shortcut for calling `client.geocode.simple`.
-
+
+## Passing additional parameters
+
+Any other parameter supported by the [`findAddressCandidates`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm) operation of the World Geocoding Service can also be passed through.
+
+```javascript
+    client.geocode({
+        address: "920 SW 3rd Ave",
+        searchExtent: "-101,30,-100,31"
+    }, geocoderResponseCallback);
+```
+
+You can also send requests to your own geocoding service hosted on ArcGIS Server.
+
+```javascript
+    client.options.geocoderUrl: "https://yourserver.com/arcgis/rest/services/CustomGeocoder"
+    client.geocode({
+        address: "920 SW 3rd Ave"
+    }, geocoderResponseCallback);
+```
+
 ## Reverse Geocoding
 
 ```javascript
