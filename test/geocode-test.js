@@ -7,8 +7,8 @@ var geocode = require('../lib/geocode');
 vows.describe('Geocode').addBatch({
   'When requesting a valid geocode': {
     topic: function () {
-      geocode.geocode({ 
-        text: "920 SW 3rd Ave, Portland, OR 97204"
+      geocode.geocode({
+        singleLine: "920 SW 3rd Ave, Portland, OR 97204"
       }, this.callback);
     },
     'It should return the correct latitude and longitude': function (err, data) {
@@ -20,8 +20,8 @@ vows.describe('Geocode').addBatch({
   },
   'When running using the "simple" method': {
     topic: function () {
-      geocode.geocode.simple({ 
-        text: "920 SW 3rd Ave, Portland, OR 97204"
+      geocode.geocode.simple({
+        singleLine: "920 SW 3rd Ave, Portland, OR 97204"
       }, this.callback);
     },
     'It should return the correct latitude and longitude': function (err, data) {
@@ -49,9 +49,9 @@ vows.describe('Geocode').addBatch({
       assert.equal(err.message, "Unable to complete operation.");
     }
   },
-  'When requesting all address matches using text': {
+  'When requesting all address matches using singleLine': {
     topic: function () {
-      geocode.geocode({ text: "920 3rd Ave, Portland, OR 97204" }, this.callback);
+      geocode.geocode({ singleLine: "920 3rd Ave, Portland, OR 97204" }, this.callback);
     },
     'It should return a sorted list of likely geocode matches': function (err, data) {
       assert.equal(err, null);
@@ -113,7 +113,7 @@ vows.describe('Geocode').addBatch({
   'When making an invalid simple request': {
     topic: function () {
       geocode.options = {geocoderUrl: "http://geocode.arcgis.com/arcgis/rest/services/foo"};
-      geocode.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback);
+      geocode.geocode({ singleLine: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback);
       geocode.options = null;
     },
     'we should parse the response manually for the error within the 200 status code message': function (err, data) {
@@ -125,7 +125,7 @@ vows.describe('Geocode').addBatch({
   'When making a really invalid simple request': {
     topic: function () {
       geocode.options = {geocoderUrl: "http://foo.arcgis.com/arcgis/rest/services/GeocodeServer"};
-      geocode.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback);
+      geocode.geocode({ singleLine: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback);
       geocode.options = null;
     },
     'we should return the genuine error response from the server': function (err, data) {

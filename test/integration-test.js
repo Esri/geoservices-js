@@ -7,7 +7,7 @@ vows.describe('Integration').addBatch({
   'When requesting a valid geocode': {
     topic: function () {
       var esri = new geoservices();
-      esri.geocode({ text: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback);
+      esri.geocode({ singleLine: "920 SW 3rd Ave, Portland, OR 97204" }, this.callback);
     },
     'It should return the correct latitude and longitude': function (err, data) {
       assert.equal(err, null);

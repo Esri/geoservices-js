@@ -15,7 +15,7 @@ documented here are based on that API. For the most current and official informa
 By default, geocoding makes simple single input field requests to the [World Geocoding Service](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm):
 
 ```javascript
-    client.geocode({ text: "920 SW 3rd Ave, Portland, OR 97201" }, function (err, result) {
+    client.geocode({ singleLine: "920 SW 3rd Ave, Portland, OR 97201" }, function (err, result) {
       if (err) {
         console.error("ERROR: " + err);
       } else {
@@ -26,25 +26,24 @@ By default, geocoding makes simple single input field requests to the [World Geo
 ```
 
 `client.geocode` is a shortcut for calling `client.geocode.simple`.
-`text` is mapped automatically as the geocoder parameter `singleLine`.
 
 ## Passing additional parameters
 
-Any parameter supported by the [`findAddressCandidates`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm) operation of the World Geocoding Service can be passed through.
+Any other parameter supported by the [`findAddressCandidates`](https://developers.arcgis.com/rest/geocode/api-reference/geocoding-find-address-candidates.htm) operation of the World Geocoding Service can also be passed through.
 
 ```javascript
     client.geocode({
         address: "920 SW 3rd Ave",
-        searchExtent: "-101,30,-100,31"   
+        searchExtent: "-101,30,-100,31"
     }, geocoderResponseCallback);
 ```
 
-You can also send requests to a geocoding service hosted on ArcGIS Server.
+You can also send requests to your own geocoding service hosted on ArcGIS Server.
 
 ```javascript
     client.options.geocoderUrl: "https://yourserver.com/arcgis/rest/services/CustomGeocoder"
     client.geocode({
-        address: "920 SW 3rd Ave"  
+        address: "920 SW 3rd Ave"
     }, geocoderResponseCallback);
 ```
 

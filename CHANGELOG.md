@@ -2,6 +2,20 @@
 
 ## [Upcoming changes][Unreleased]
 
+### Breaking Changes
+
+* As per the recommendation of the Geocoding team, the `/find?` operation is no longer utilized.  Using `/findAddressCandidates?` exclusively has allowed us to simplify this API by removing the `addresses()` method entirely, but necessitates the following changes.
+
+1. the response signature of `geocode()` now provides an array of candidates, not locations.
+2. `singleLine` is now the appropriate parameter to use when supplying a single string to be located.
+
+```js
+client.geocode({ singleLine: "voodoo doughnuts" }, function (err, result) {
+    console.log(result.candidates[0]); //
+  }
+});
+```
+
 ## [1.1.1]
 
 ### Added
@@ -23,7 +37,7 @@
 
 ## 1.0.0
 
-#### Breaking Changes
+### Breaking Changes
 
 * FeatureService calls now automatically detect JSON being passed in and no longer require coersion to `String`
 
