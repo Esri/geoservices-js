@@ -68,4 +68,4 @@ This is an open library for communicating with any service that implements the G
 
 ## See Also
 
- * [gecoder-arcgis](https://github.com/StephanGeorg/geocoder-arcgis) provides a client for just the Geocoding APIs with a promise-based design.
+ * [geocoder-arcgis](https://github.com/StephanGeorg/geocoder-arcgis) provides a client for just the Geocoding APIs with a promise-based design.
