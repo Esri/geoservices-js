@@ -1,6 +1,5 @@
 var vows   = require('vows');
 var assert = require('assert');
-
 var geocode = require('../lib/geocode');
 
 
@@ -14,8 +13,8 @@ vows.describe('Geocode').addBatch({
     'It should return the correct latitude and longitude': function (err, data) {
       assert.equal(err, null);
       assert.isTrue(data.candidates.length > 1);
-      assert.equal(data.candidates[0].location.x.toPrecision(5), (-122.67633658436517).toPrecision(5));
-      assert.equal(data.candidates[0].location.y.toPrecision(5), (45.5167324388521).toPrecision(5));
+      assert.equal(data.candidates[0].location.x.toPrecision(7), (-122.67645970257969).toPrecision(7));
+      assert.equal(data.candidates[0].location.y.toPrecision(7), (45.516501870102175).toPrecision(7));
     }
   },
   'When running using the "simple" method': {
@@ -27,8 +26,8 @@ vows.describe('Geocode').addBatch({
     'It should return the correct latitude and longitude': function (err, data) {
       assert.equal(err, null);
       assert.isTrue(data.candidates.length > 1);
-      assert.equal(data.candidates[0].location.x.toPrecision(5), (-122.67633658436517).toPrecision(5));
-      assert.equal(data.candidates[0].location.y.toPrecision(5), (45.5167324388521).toPrecision(5));
+      assert.equal(data.candidates[0].location.x.toPrecision(7), (-122.67645970257969).toPrecision(7));
+      assert.equal(data.candidates[0].location.y.toPrecision(7), (45.516501870102175).toPrecision(7));
     }
   },
   'When using reverse geocoding': {
@@ -37,7 +36,7 @@ vows.describe('Geocode').addBatch({
     },
     'It should return something pretty close to what it should': function (err, data) {
       assert.equal(err, null);
-      assert.equal(data.address.Address, "918 SW 3rd Ave");
+      assert.equal(data.address.Address, "300 SW Taylor St");
     }
   },
   'When performing an invalid reverse geocode': {
