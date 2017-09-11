@@ -20,7 +20,7 @@ By default, geocoding makes simple single input field requests to the [World Geo
         console.error("ERROR: " + err);
       } else {
         console.log("Found it at " + result.candidates[0].location.y
-        + ", " + result.candidates[0].location.geometry.x);
+        + ", " + result.candidates[0].location.x);
       }
     });
 ```
