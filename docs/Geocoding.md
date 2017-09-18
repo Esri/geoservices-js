@@ -41,7 +41,7 @@ Any other parameter supported by the [`findAddressCandidates`](https://developer
 You can also send requests to your own geocoding service hosted on ArcGIS Server.
 
 ```javascript
-    client.options.geocoderUrl: "https://yourserver.com/arcgis/rest/services/CustomGeocoder"
+    client.options = {geocoderUrl: "https://yourserver.com/arcgis/rest/services/CustomGeocoder"};
     client.geocode({
         address: "920 SW 3rd Ave"
     }, geocoderResponseCallback);
