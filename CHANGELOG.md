@@ -2,6 +2,12 @@
 
 ## [Upcoming changes][Unreleased]
 
+## [2.0.1]
+
+### Added
+
+The library now includes a browserify build that substitutes `xhr` to make requests. ([#115](https://github.com/Esri/geoservices-js/pull/115) thanks [@nickpeihl](https://github.com/nickpeihl)!)
+
 ## [2.0.0]
 
 ### Breaking Changes
@@ -43,7 +49,8 @@ client.geocode({ singleLine: "voodoo doughnuts" }, function (err, result) {
 
 * FeatureService calls now automatically detect JSON being passed in and no longer require coersion to `String`
 
-[Unreleased]: https://github.com/Esri/geoservices-js/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/Esri/geoservices-js/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/Esri/geoservices-js/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/Esri/geoservices-js/compare/v1.1.1...v2.0.0
 [1.1.1]: https://github.com/Esri/geoservices-js/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/Esri/geoservices-js/compare/v1.0.0...v1.1.0
