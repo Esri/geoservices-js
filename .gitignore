@@ -9,3 +9,4 @@ Icon
 report.xml
 
 debug/*.js
+/geoservices.min.js
