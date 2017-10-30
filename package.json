@@ -7,7 +7,8 @@
     "request": "xhr"
   },
   "scripts": {
-    "test": "vows --spec",
+    "lint": "grunt jshint",
+    "test": "npm run lint && vows --spec",
     "prepublishOnly": "browserify index.js --standalone Geoservices | uglifyjs -cm > geoservices.min.js"
   },
   "repository": {
@@ -27,11 +28,11 @@
   "devDependencies": {
     "browserify": "^14.4.0",
     "gh-release": "^2.2.1",
-    "grunt": "0.4.x",
-    "grunt-complexity": "~0.1.2",
-    "grunt-contrib-concat": "~0.2.0",
-    "grunt-contrib-copy": "0.4.x",
-    "grunt-contrib-jshint": "0.3.x",
+    "grunt": "1.0.0",
+    "grunt-complexity": "~1.1.0",
+    "grunt-contrib-concat": "~1.0.1",
+    "grunt-contrib-copy": "1.0.0",
+    "grunt-contrib-jshint": "1.1.0",
     "grunt-vows": "0.4.x",
     "uglify-js": "^3.1.4",
     "vows": ">=0.7.0"
