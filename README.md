@@ -1,4 +1,6 @@
-# Geoservices-js
+# Geoservices-js (Deprecated)
+
+Current development efforts are being being invested in [`arcgis-rest-js`](https://github.com/Esri/arcgis-rest-js). Please consider upgrading.
 
 [![Build Status](https://travis-ci.org/Esri/geoservices-js.svg?branch=master)](https://travis-ci.org/Esri/geoservices-js)
 
