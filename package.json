@@ -22,20 +22,20 @@
     "geoservices"
   ],
   "dependencies": {
-    "request": "^2.34.0",
+    "request": "^2.87.0",
     "xhr": "^2.4.0"
   },
   "devDependencies": {
     "browserify": "^14.4.0",
-    "gh-release": "^2.2.1",
-    "grunt": "1.0.0",
+    "gh-release": "^3.2.1",
+    "grunt": "^1.0.3",
     "grunt-complexity": "~1.1.0",
     "grunt-contrib-concat": "~1.0.1",
     "grunt-contrib-copy": "1.0.0",
     "grunt-contrib-jshint": "1.1.0",
     "grunt-vows": "0.4.x",
     "uglify-js": "^3.1.4",
-    "vows": ">=0.7.0"
+    "vows": "^0.8.2"
   },
   "author": "",
   "license": "Apache-2.0",
